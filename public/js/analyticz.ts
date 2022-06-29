@@ -44,6 +44,10 @@ declare global {
 
       const data = {
         n: event,
+        u: location.href,
+        d: script.getAttribute("data-domain"),
+        r: document.referrer || null,
+        w: window.innerWidth,
       };
 
       const xhr = new XMLHttpRequest();
