@@ -1,11 +1,11 @@
 {
-  "name": "analytics",
+  "name": "analyticz",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 3003",
     "lint": "next lint",
     "postinstall": "prisma generate"
   },

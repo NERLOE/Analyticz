@@ -5,15 +5,44 @@ import type { AppType } from "next/dist/shared/lib/utils";
 import superjson from "superjson";
 import { SessionProvider } from "next-auth/react";
 import "../styles/globals.css";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import AnalyticzProvider from "src/providers/AnalyticzProvider";
 
 const MyApp: AppType = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
+  const router = useRouter();
+
   return (
-    <SessionProvider session={session}>
-      <Component {...pageProps} />
-    </SessionProvider>
+    <>
+      <Head>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <title>Analyticz.io</title>
+        <link rel="canonical" href={process.env.PROD_URL + router.pathname} />
+        <meta name="title" content="Analyticz.io" />
+        <meta name="twitter:title" content="Analyticz.io" />
+        <meta
+          name="description"
+          content="Analyticz.io is an open source analytics website, for monitoring and analyzing traffic on your website."
+        />
+        <meta
+          name="twitter:description"
+          content="Analyticz.io is an open source analytics website, for monitoring and analyzing traffic on your website."
+        />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@analyticzio" />
+        <meta name="og:site-name" content="Analyticz" />
+      </Head>
+
+      <AnalyticzProvider domain="analyticz.marcusnerloe.dk">
+        <SessionProvider session={session}>
+          <Component {...pageProps} />
+        </SessionProvider>
+      </AnalyticzProvider>
+    </>
   );
 };
 
@@ -22,7 +51,9 @@ const getBaseUrl = () => {
     return "";
   }
   if (process.browser) return ""; // Browser should use current path
-  if (process.env.PROD_URL) return `https://${process.env.PROD_URL}`; // SSR should use vercel url
+  if (process.env.NODE_ENV === "production" && process.env.PROD_URL) {
+    return `${process.env.PROD_URL}`;
+  }
 
   return `http://localhost:${process.env.PORT ?? 3000}`; // dev SSR should use localhost
 };
