@@ -1,10 +1,9 @@
 import type { NextPage } from "next";
 import { trpc } from "@utils/trpc";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
 
 const Home: NextPage = () => {
-  const session = useSession();
+  const { data: session } = trpc.useQuery(["auth.getSession"]);
 
   return (
     <>
@@ -15,7 +14,7 @@ const Home: NextPage = () => {
         {session && session.data ? (
           <>
             <p className="text-center text-2xl text-color-white">
-              Welcome, {session.data.user.name}
+              Welcome, {session.user.name}
             </p>
             <Link href="/api/auth/signout">Logout</Link>
           </>

@@ -65,6 +65,8 @@ model Visit {
     website    Website   @relation(fields: [websiteId], references: [id], onDelete: Cascade)
     referrerId String?
     referrer   Referrer? @relation(fields: [referrerId], references: [id], onDelete: Cascade)
+    os         String?
+    browser    String?
     visitedAt  DateTime  @default(now())
 }
 

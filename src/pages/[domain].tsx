@@ -8,8 +8,10 @@ import {
   NextPage,
   NextPageContext,
 } from "next";
+import { unstable_getServerSession } from "next-auth";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { authOptions } from "./api/auth/[...nextauth]";
 
 interface Props {
   website: Website;
@@ -61,7 +63,11 @@ export async function getServerSideProps(
     });
 
     if (website) {
-      const session = await getSession({ req: context.req });
+      const session = await unstable_getServerSession(
+        context.req,
+        context.res,
+        authOptions
+      );
 
       if (website.ownerId != session?.user.id) {
         return {

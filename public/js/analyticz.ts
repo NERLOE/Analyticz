@@ -47,11 +47,12 @@ declare global {
     } catch (e) {}
 
     const data = {
-      n: event,
+      e: event,
       u: location.href,
       d: scriptEl.getAttribute("data-domain"),
       r: document.referrer || null,
       w: window.innerWidth,
+      p: window.navigator,
     };
 
     const xhr = new XMLHttpRequest();
