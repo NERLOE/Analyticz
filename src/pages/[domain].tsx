@@ -42,9 +42,9 @@ const AnalyticsPage: NextPage<Props> = () => {
       </p>
       {visits.map((visit) => {
         return (
-          <p className="text-slate-300" key={visit.path}>
+          <a href={visit.url} className="text-slate-300" key={visit.path}>
             {visit.path}: {visit._count.id}
-          </p>
+          </a>
         );
       })}
     </div>
