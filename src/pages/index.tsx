@@ -20,7 +20,7 @@ const Home: NextPage = () => {
               Welcome, {session.user.name}
             </p>
             <a
-              className="text-center text-2xl text-red-500 my-5"
+              className="text-center text-2xl text-red-500 my-5 cursor-pointer"
               onClick={() => signOut()}
             >
               Logout
