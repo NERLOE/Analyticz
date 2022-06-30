@@ -19,10 +19,10 @@ const Home: NextPage = () => {
               Welcome, {session.user.name}
             </p>
             <Link
-              className="text-center text-2xl text-white my-25"
+              className="text-center text-2xl text-red-500 my-25"
               href={"/api/auth/signout"}
             >
-              Login
+              Logout
             </Link>
           </>
         ) : (
