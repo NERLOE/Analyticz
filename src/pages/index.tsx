@@ -27,9 +27,4 @@ const Home: NextPage = () => {
   );
 };
 
-export async function getServerSideProps(ctx) {
-  console.log("TEEEST");
-  return { props: {} };
-}
-
 export default Home;
