@@ -7,7 +7,8 @@ import { LogEvents } from "@constants/events";
 import { getWebsiteData } from "@utils/website-data";
 import platform from "platform";
 import NextCors from "nextjs-cors";
-import geoip from "geoip-lite";
+import geolite2 from "geolite2";
+import maxmind from "maxmind";
 
 const schema = z.object({
   d: z.string(), // Domain
@@ -31,7 +32,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const data = schema.parse(JSON.parse(req.body));
     const ip = getIpFromRequest(req);
     console.log("ip", ip);
-    const geo = geoip.lookup(ip);
+    const lookup = await maxmind.open(geolite2.paths.city);
+    const geo = lookup.get(ip);
     console.log("geo", geo);
 
     const { name: browser, os } = platform.parse(req.headers["user-agent"]);
