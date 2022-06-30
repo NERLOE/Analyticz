@@ -10,15 +10,9 @@ export default NextAuth({
   // Configure one or more authentication providers
   adapter: PrismaAdapter(prisma),
   providers: [
-    CredentialsProvider({
-      credentials: {
-        username: { label: "Username", type: "text" },
-        password: { label: "Password", type: "password" },
-      },
-
-      async authorize(credentials, req) {
-        return null;
-      },
+    GithubProvider({
+      clientId: process.env.GITHUB_ID,
+      clientSecret: process.env.GITHUB_SECRET,
     }),
     // ...add more providers here
   ],
