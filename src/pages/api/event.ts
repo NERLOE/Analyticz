@@ -40,7 +40,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       });
 
       if (refFound) {
-        if (Date.now() - refFound.updatedAt.getTime() > 1000 * 60 * 60 * 24) {
+        if (Date.now() - refFound.updatedAt.getTime() > 1000 * 60 * 10) {
           const websiteData = await getWebsiteData(data.r);
 
           if (websiteData) {
