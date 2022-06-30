@@ -20,6 +20,7 @@
     "axios": "^0.27.2",
     "babel-plugin-superjson-next": "^0.4.3",
     "cheerio": "1.0.0-rc.12",
+    "geolite2": "^3.5.1",
     "maxmind": "^4.3.6",
     "next": "12.2.0",
     "next-auth": "^4.7.0",
