@@ -1,48 +1,33 @@
-import { Website } from "@prisma/client";
-import { prisma } from "@server/db/client";
-import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
+import { trpc } from "@utils/trpc";
+import { useRouter } from "next/router";
 
-interface Props {
-  website: Website;
-}
+const AnalyticsPage: React.FC = () => {
+  const router = useRouter();
 
-const AnalyticsPage = ({ website }: Props) => {
-  console.log("website", website);
+  const { data: website } = trpc.useQuery([
+    "analytics.getWebsite",
+    {
+      domain: router.query.domain as string,
+    },
+  ]);
+
+  if (!website) return null;
+
+  const { data: visits } = trpc.useQuery([
+    "analytics.getVisits",
+    { websiteId: website.id },
+  ]);
+
+  if (!visits) return null;
+
+  console.log(visits);
+
   return (
     <div className="flex">
-      <p>{website?.domain}</p>
+      <p>{website.domain}</p>
+      <p>{visits._count.id}</p>
     </div>
   );
 };
-
-export async function getServerSideProps(
-  context: GetServerSidePropsContext
-): Promise<GetServerSidePropsResult<Props>> {
-  const { domain } = context.query;
-
-  if (typeof domain == "string") {
-    const website = await prisma.website.findFirst({
-      where: { domain: domain },
-      include: {
-        visits: true,
-      },
-    });
-
-    if (website) {
-      return {
-        props: {
-          website: website,
-        },
-      };
-    }
-  }
-
-  return {
-    redirect: {
-      destination: "/",
-      permanent: true,
-    },
-  };
-}
 
 export default AnalyticsPage;

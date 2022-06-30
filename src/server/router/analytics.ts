@@ -3,19 +3,23 @@ import { z } from "zod";
 
 export const analyticsRouter = createRouter()
   .query("getWebsite", {
-    input: z
-      .object({
-        text: z.string().nullish(),
-      })
-      .nullish(),
-    resolve({ input }) {
-      return {
-        greeting: `Hello ${input?.text ?? "world"}`,
-      };
+    input: z.object({
+      domain: z.string(),
+    }),
+    async resolve({ ctx, input }) {
+      return await ctx.prisma.website.findUnique({
+        where: { domain: input.domain },
+      });
     },
   })
-  .query("getAll", {
-    async resolve({ ctx }) {
-      return await ctx.prisma.user.findMany();
+  .query("getVisits", {
+    input: z.object({
+      websiteId: z.string(),
+    }),
+    async resolve({ ctx, input }) {
+      return await ctx.prisma.visit.aggregate({
+        _count: { id: true },
+        where: { websiteId: input.websiteId },
+      });
     },
   });
