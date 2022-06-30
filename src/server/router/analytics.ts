@@ -25,6 +25,7 @@ export const analyticsRouter = createRouter()
         where: { websiteId: input.websiteId },
         orderBy: {
           _count: { id: "desc" },
+          path: "asc",
         },
       });
     },
