@@ -1,3 +1,4 @@
+import { getIpFromRequest } from "./../../utils/request-information";
 // src/pages/api/examples.ts
 import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "@server/db/client";
@@ -27,6 +28,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   try {
     const data = schema.parse(JSON.parse(req.body));
+    const ip = getIpFromRequest(req);
+
     const { name: browser, os } = platform.parse(req.headers["user-agent"]);
 
     const website = await prisma.website.findUnique({
