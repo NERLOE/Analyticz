@@ -31,10 +31,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const data = schema.parse(JSON.parse(req.body));
     const ip = getIpFromRequest(req);
-    console.log("ip", ip);
     const lookup = await maxmind.open(geolite2.paths.city);
     const geo = lookup.get(ip);
-    console.log("geo", geo);
 
     const { name: browser, os } = platform.parse(req.headers["user-agent"]);
 
