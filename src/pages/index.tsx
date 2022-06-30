@@ -29,7 +29,7 @@ const Home: NextPage = () => {
         ) : (
           <Link
             className="text-center text-2xl text-white my-10"
-            href={"/api/auth/signin"}
+            href={"/signin"}
           >
             Login
           </Link>

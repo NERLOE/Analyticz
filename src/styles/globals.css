@@ -3,5 +3,11 @@
 @tailwind utilities;
 
 html {
-  background-color: #1b3a4b;
+  @apply bg-dark-900;
+}
+
+@layer components {
+  .button {
+    @apply inline-flex items-center border font-medium relative text-base px-4 py-2 rounded-md text-white border-pink-700 bg-pink-600 hover:bg-pink-700 hover:border-pink-800 shadow-sm transition-all;
+  }
 }

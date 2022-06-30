@@ -71,12 +71,12 @@ export async function getServerSideProps(
         authOptions
       );
 
-      if (website.ownerId != session?.user.id) {
+      if (
+        website.ownerId != session?.user.id &&
+        process.env.NODE_ENV === "production"
+      ) {
         return {
-          redirect: {
-            destination: "/",
-            permanent: true,
-          },
+          notFound: true,
         };
       }
 
@@ -89,10 +89,7 @@ export async function getServerSideProps(
   }
 
   return {
-    redirect: {
-      destination: "/",
-      permanent: true,
-    },
+    notFound: true,
   };
 }
 
