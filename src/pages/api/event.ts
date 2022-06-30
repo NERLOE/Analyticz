@@ -85,6 +85,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         path: url.pathname,
         websiteId: website.id,
         referrerId: ref?.id,
+        os: os?.family,
+        browser,
       },
     });
 
