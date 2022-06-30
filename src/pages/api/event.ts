@@ -12,7 +12,6 @@ const schema = z.object({
   r: z.string().url().nullable().optional(), // Referrer
   u: z.string().url(), // URL
   w: z.number().optional(), // Window width
-  p: z.string(), // Platform
 });
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
@@ -21,7 +20,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   try {
     const data = schema.parse(JSON.parse(req.body));
-    const { name: browser, os } = platform.parse(data.p);
+    const { name: browser, os } = platform.parse(req.headers["user-agent"]);
 
     const website = await prisma.website.findUnique({
       where: {
