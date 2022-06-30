@@ -1,0 +1,1 @@
+screen -S "Analyticz" -U -m -d pnpm start
