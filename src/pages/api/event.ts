@@ -8,7 +8,8 @@ import { getWebsiteData } from "@utils/website-data";
 import platform from "platform";
 import NextCors from "nextjs-cors";
 import geolite2 from "geolite2";
-import maxmind from "maxmind";
+import maxmind, { CityResponse, CountryResponse } from "maxmind";
+import { x64 } from "murmurhash3js";
 
 const schema = z.object({
   d: z.string(), // Domain
@@ -32,10 +33,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const data = schema.parse(JSON.parse(req.body));
     const ip = getIpFromRequest(req);
     const lookup = await maxmind.open(geolite2.paths.city);
-    const geo = lookup.get(ip);
+    const geo = lookup.get(ip) as (CityResponse & CountryResponse) | null;
     console.log("geo", geo);
 
-    const { name: browser, os } = platform.parse(req.headers["user-agent"]);
+    const userAgent = req.headers["user-agent"];
+    const { name: browser, os } = platform.parse(userAgent);
 
     const website = await prisma.website.findUnique({
       where: {
@@ -90,19 +92,36 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     const url = new URL(data.u);
+    const visitorId = x64.hash128(
+      [
+        userAgent,
+        geo?.city?.geoname_id ?? undefined,
+        geo?.continent?.geoname_id ?? undefined,
+        geo?.country?.geoname_id ?? undefined,
+        ip,
+        req.headers.accept,
+        req.headers["accept-language"],
+      ]
+        .filter((x) => x != undefined)
+        .join("~~~")
+    );
 
-    if (data.e) {
+    if (data.e == "pageView") {
+      await prisma.visit.create({
+        data: {
+          url: data.u,
+          path: url.pathname,
+          websiteId: website.id,
+          referrerId: ref?.id,
+          os: os?.family,
+          browser,
+          city: geo?.city?.names?.en,
+          country: geo?.country?.names?.en,
+          ip,
+          visitorId,
+        },
+      });
     }
-    await prisma.visit.create({
-      data: {
-        url: data.u,
-        path: url.pathname,
-        websiteId: website.id,
-        referrerId: ref?.id,
-        os: os?.family,
-        browser,
-      },
-    });
 
     return res.status(200).json({ success: true });
   } catch (err) {

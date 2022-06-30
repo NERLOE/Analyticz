@@ -67,6 +67,10 @@ model Visit {
     referrer   Referrer? @relation(fields: [referrerId], references: [id], onDelete: Cascade)
     os         String?
     browser    String?
+    ip         String?
+    country    String?
+    city       String?
+    visitorId  String?
     visitedAt  DateTime  @default(now())
 }
 
