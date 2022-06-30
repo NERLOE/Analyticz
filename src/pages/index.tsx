@@ -5,8 +5,6 @@ import Link from "next/link";
 const Home: NextPage = () => {
   const session = trpc.useQuery(["auth.getSession"]);
 
-  console.log(session);
-
   return (
     <>
       <div className="flex flex-col items-center justify-center w-1/2 min-h-screen mx-auto">

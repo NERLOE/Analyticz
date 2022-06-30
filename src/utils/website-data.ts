@@ -53,6 +53,10 @@ export async function getWebsiteData(url: string): Promise<{
       icon = `${new URL(url).origin}${icon}`;
     }
 
+    if (!icon) {
+      console.log(`Couldn't find any icon for url, ${url}`);
+    }
+
     return { icon: icon, title: title };
   } catch (err) {
     return null;

@@ -17,9 +17,15 @@ export const analyticsRouter = createRouter()
       websiteId: z.string(),
     }),
     async resolve({ ctx, input }) {
-      return await ctx.prisma.visit.aggregate({
-        _count: { id: true },
+      return await ctx.prisma.visit.groupBy({
+        by: ["path"],
+        _count: {
+          id: true,
+        },
         where: { websiteId: input.websiteId },
+        orderBy: {
+          _count: { id: "desc" },
+        },
       });
     },
   });
