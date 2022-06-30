@@ -37,10 +37,12 @@ const AnalyticsPage: NextPage<Props> = () => {
 
   return (
     <div>
-      <p>{website.domain}</p>
+      <p className="text-center font-extrabold text-7xl text-white">
+        {website.domain}
+      </p>
       {visits.map((visit) => {
         return (
-          <p className="text-white" key={visit.path}>
+          <p className="text-slate-300" key={visit.path}>
             {visit.path}: {visit._count.id}
           </p>
         );
