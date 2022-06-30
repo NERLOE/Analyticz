@@ -17,6 +17,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST")
     return res.status(400).send({ error: "Method not allowed" });
 
+  console.log("request", req);
+
   try {
     const data = schema.parse(req.body);
 
