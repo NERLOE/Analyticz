@@ -13,6 +13,7 @@ const iconSelectors = [
   "meta[name='msapplication-TileImage' i][content]",
   "meta[name='twitter:image' i][content]",
   "meta[property='og:image' i][content]",
+  "meta[itemprop='image' i][content]",
 ];
 
 function getIconsFromHtml($: CheerioAPI) {
