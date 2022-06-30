@@ -54,7 +54,7 @@ export async function getWebsiteData(url: string): Promise<{
     }
 
     if (!icon) {
-      console.log(`Couldn't find any icon for url, ${url}`);
+      console.log(`Couldn't find any icon for url, ${url}`, icons);
     }
 
     return { icon: icon, title: title };
