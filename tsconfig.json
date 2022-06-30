@@ -20,7 +20,12 @@
     "paths": {
       "@server/*": ["src/server/*"],
       "@utils/*": ["src/utils/*"],
-      "@components/*": ["src/components/*"]
+      "@components/*": ["src/components/*"],
+      "@types/*": ["src/types/*"],
+      "@constants/*": ["src/constants/*"],
+      "@providers/*": ["src/providers/*"],
+      "@schemas/*": ["src/schemas/*"],
+      "@contexts/*": ["src/contexts/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

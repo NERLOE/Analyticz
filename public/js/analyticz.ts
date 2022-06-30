@@ -3,84 +3,97 @@ declare global {
     _phantom: any;
     __nightmare: any;
     Cypress: any;
-    analyticz?: (event: string) => void;
+    analyticz?: (event: LogEvent, options?: { props: { url: string } }) => void;
   }
 }
 
 (function () {
+  "use strict";
+
   let location = window.location;
   let document = window.document;
-  let script = document.currentScript as HTMLScriptElement;
-  let apiUrl =
-    script.getAttribute("data-api") ||
-    new URL(script.src).origin + "/api/event";
 
-  function ignoreEvent(msg: string) {
+  let scriptEl = document.currentScript as HTMLScriptElement;
+  let endpoint =
+    scriptEl.getAttribute("data-api") ||
+    new URL(scriptEl.src).origin + "/api/event";
+
+  function warn(msg: string) {
     console.warn(`Ignoring Event: ${msg}`);
   }
 
-  function logEvent(event: string) {
+  function trigger(event: LogEvent, options?: any) {
     if (
       /^localhost$|^127(\.[0-9]+){0,2}\.[0-9]+$|^\[::1?\]$/.test(
         location.hostname
       ) ||
       "file:" === location.protocol
     ) {
-      return ignoreEvent("localhost");
+      return warn("localhost");
     }
 
     if (
-      !(
-        window._phantom ||
-        window.__nightmare ||
-        window.navigator.webdriver ||
-        window.Cypress
-      )
-    ) {
-      try {
-        if ("true" === window.localStorage.analyticz_ignore)
-          return ignoreEvent("localStorage flag");
-      } catch (t) {}
+      window._phantom ||
+      window.__nightmare ||
+      window.navigator.webdriver ||
+      window.Cypress
+    )
+      return;
 
-      const data = {
-        n: event,
-        u: location.href,
-        d: script.getAttribute("data-domain"),
-        r: document.referrer || null,
-        w: window.innerWidth,
-      };
+    try {
+      if (window.localStorage.analyticz_ignore === "true") {
+        return warn("localStorage flag");
+      }
+    } catch (e) {}
 
-      const xhr = new XMLHttpRequest();
-      xhr.open("POST", apiUrl, true);
-      xhr.setRequestHeader("Content-Type", "text/plain");
-      xhr.send(JSON.stringify(data));
-      xhr.onreadystatechange = () => {
-        4 === xhr.readyState;
-      };
-    }
-  }
+    const data = {
+      n: event,
+      u: location.href,
+      d: scriptEl.getAttribute("data-domain"),
+      r: document.referrer || null,
+      w: window.innerWidth,
+    };
 
-  function pageView() {
-    logEvent("pageView");
-  }
-
-  let pushState: History["pushState"];
-  let history: History = window.history;
-
-  if (history.pushState && (pushState = history.pushState)) {
-    history.pushState = function () {
-      pushState.apply(this, arguments as any);
-      pageView();
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", endpoint, true);
+    xhr.setRequestHeader("Content-Type", "text/plain");
+    xhr.send(JSON.stringify(data));
+    xhr.onreadystatechange = () => {
+      4 === xhr.readyState;
     };
   }
 
-  window.addEventListener("popState", pageView);
+  let lastPage: string;
 
-  "prerender" === (document.visibilityState as any)
-    ? document.addEventListener("visibilitychange", function () {
-        "visible" !== document.visibilityState || pageView();
-      })
-    : pageView();
+  function page() {
+    if (lastPage === location.pathname) return;
+    lastPage = location.pathname;
+    trigger("pageView");
+  }
+
+  let his: History = window.history;
+
+  if (his.pushState) {
+    let ogPushState: History["pushState"] = his.pushState;
+    his.pushState = function () {
+      ogPushState.apply(this, arguments as any);
+      page();
+    };
+  }
+
+  window.addEventListener("popstate", page);
+
+  function handleVisibilityChange() {
+    if (!lastPage && document.visibilityState === "visible") {
+      page();
+    }
+  }
+
+  if ((document.visibilityState as any) === "prerender") {
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+  } else {
+    page();
+  }
 })();
 
 export {};

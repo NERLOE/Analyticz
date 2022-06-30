@@ -10,10 +10,6 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Example {
-    id String @id @default(cuid())
-}
-
 // Neccessary for Next auth
 model Account {
     id                String  @id @default(cuid())
@@ -50,6 +46,7 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
+    websites      Website[]
 }
 
 model VerificationToken {
@@ -60,11 +57,29 @@ model VerificationToken {
     @@unique([identifier, token])
 }
 
+model Visit {
+    id         String    @id @default(cuid())
+    url        String
+    path       String
+    referrerId String?
+    referrer   Referrer? @relation(fields: [referrerId], references: [id], onDelete: Cascade)
+    visitedAt  DateTime  @default(now())
+}
+
+model Website {
+    id      String @id @default(cuid())
+    ownerId String
+    owner   User   @relation(fields: [ownerId], references: [id])
+    domain  String @unique
+}
+
 model Referrer {
-    id     String @id @default(cuid())
-    title  String
-    domain String
-    icon   String
+    id        String   @id @default(cuid())
+    title     String
+    domain    String   @unique
+    icon      String?
+    updatedAt DateTime @default(now())
+    visits    Visit[]
 }
 
 enum Role {

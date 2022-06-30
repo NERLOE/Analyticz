@@ -1,0 +1,1 @@
+type LogEvent = typeof LogEvents;
