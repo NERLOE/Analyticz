@@ -8,7 +8,7 @@ import {
   NextPage,
   NextPageContext,
 } from "next";
-import { unstable_getServerSession } from "next-auth";
+import { unstable_getServerSession as getServerSession } from "next-auth";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { authOptions } from "./api/auth/[...nextauth]";
@@ -63,7 +63,7 @@ export async function getServerSideProps(
     });
 
     if (website) {
-      const session = await unstable_getServerSession(
+      const session = await getServerSession(
         context.req,
         context.res,
         authOptions
