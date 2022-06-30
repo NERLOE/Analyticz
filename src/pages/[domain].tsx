@@ -40,13 +40,15 @@ const AnalyticsPage: NextPage<Props> = () => {
       <p className="text-center font-extrabold text-7xl text-white">
         {website.domain}
       </p>
-      {visits.map((visit) => {
-        return (
-          <p className="text-slate-300" key={visit.path}>
-            {visit.path}: {visit._count.id}
-          </p>
-        );
-      })}
+      {visits
+        .sort((a, b) => (a.path > b.path ? -1 : 1))
+        .map((visit) => {
+          return (
+            <p className="text-slate-300" key={visit.path}>
+              {visit.path}: {visit._count.id}
+            </p>
+          );
+        })}
     </div>
   );
 };
