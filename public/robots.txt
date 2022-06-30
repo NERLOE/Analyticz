@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://analyticz.marcusnerloe.dk
+
+# Sitemaps
+Sitemap: https://analyticz.marcusnerloe.dk/sitemap.xml
