@@ -61,16 +61,19 @@ model Visit {
     id         String    @id @default(cuid())
     url        String
     path       String
+    websiteId  String
+    website    Website   @relation(fields: [websiteId], references: [id], onDelete: Cascade)
     referrerId String?
     referrer   Referrer? @relation(fields: [referrerId], references: [id], onDelete: Cascade)
     visitedAt  DateTime  @default(now())
 }
 
 model Website {
-    id      String @id @default(cuid())
+    id      String  @id @default(cuid())
     ownerId String
-    owner   User   @relation(fields: [ownerId], references: [id])
-    domain  String @unique
+    owner   User    @relation(fields: [ownerId], references: [id])
+    domain  String  @unique
+    visits  Visit[]
 }
 
 model Referrer {

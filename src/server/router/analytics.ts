@@ -2,7 +2,7 @@ import { createRouter } from "./context";
 import { z } from "zod";
 
 export const analyticsRouter = createRouter()
-  .query("hello", {
+  .query("getWebsite", {
     input: z
       .object({
         text: z.string().nullish(),

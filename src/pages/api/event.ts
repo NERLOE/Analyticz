@@ -78,6 +78,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       data: {
         url: data.u,
         path: url.pathname,
+        websiteId: website.id,
         referrerId: ref?.id,
       },
     });

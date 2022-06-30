@@ -1,15 +1,9 @@
 import { createRouter } from "./context";
-import { z } from "zod";
-import { unstable_getServerSession } from "next-auth";
-import { authOptions } from "src/pages/api/auth/[...nextauth]";
+import { getSession } from "next-auth/react";
 
 export const authRouter = createRouter().query("getSession", {
   async resolve({ ctx }) {
-    const session = await unstable_getServerSession(
-      ctx.req,
-      ctx.res,
-      authOptions
-    );
+    const session = await getSession({ req: ctx.req });
 
     return session;
   },
