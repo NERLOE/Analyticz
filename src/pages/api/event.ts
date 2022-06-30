@@ -7,6 +7,7 @@ import { LogEvents } from "@constants/events";
 import { getWebsiteData } from "@utils/website-data";
 import platform from "platform";
 import NextCors from "nextjs-cors";
+import geoip from "geoip-lite";
 
 const schema = z.object({
   d: z.string(), // Domain
@@ -29,6 +30,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const data = schema.parse(JSON.parse(req.body));
     const ip = getIpFromRequest(req);
+    const geo = geoip.lookup(ip);
+
+    console.log(ip, geo);
 
     const { name: browser, os } = platform.parse(req.headers["user-agent"]);
 
