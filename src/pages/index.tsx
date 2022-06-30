@@ -5,13 +5,15 @@ import Link from "next/link";
 const Home: NextPage = () => {
   const { data: session } = trpc.useQuery(["auth.getSession"]);
 
+  console.log(session);
+
   return (
     <>
       <div className="flex flex-col items-center justify-center w-1/2 min-h-screen mx-auto">
         <h1 className="font-extrabold text-center text-7xl text-color-white">
           Analyticz.io
         </h1>
-        {session && session.data ? (
+        {session ? (
           <>
             <p className="text-center text-2xl text-color-white">
               Welcome, {session.user.name}
