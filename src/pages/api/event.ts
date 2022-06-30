@@ -5,6 +5,7 @@ import z from "zod";
 import { LogEvents } from "@constants/events";
 import { getWebsiteData } from "@utils/website-data";
 import platform from "platform";
+import NextCors from "nextjs-cors";
 
 const schema = z.object({
   d: z.string(), // Domain
@@ -17,6 +18,12 @@ const schema = z.object({
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "POST")
     return res.status(400).send({ error: "Method not allowed" });
+
+  await NextCors(req, res, {
+    methods: ["POST"],
+    origin: "*",
+    optionsSuccessStatus: 200,
+  });
 
   try {
     const data = schema.parse(JSON.parse(req.body));
