@@ -15,14 +15,22 @@ const Home: NextPage = () => {
         </h1>
         {session ? (
           <>
-            <p className="text-center text-2xl text-white">
+            <p className="text-center my-5 text-2xl text-white">
               Welcome, {session.user.name}
             </p>
-            <Link href="/api/auth/signout">Logout</Link>
+            <Link
+              className="text-center text-2xl text-white my-25"
+              href={"/api/auth/signout"}
+            >
+              Login
+            </Link>
           </>
         ) : (
-          <Link href={"/api/auth/signin"}>
-            <p className="text-center text-2xl text-white my-10">Login</p>
+          <Link
+            className="text-center text-2xl text-white my-25"
+            href={"/api/auth/signin"}
+          >
+            Login
           </Link>
         )}
       </div>
