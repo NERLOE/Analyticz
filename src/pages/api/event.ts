@@ -33,6 +33,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const ip = getIpFromRequest(req);
     const lookup = await maxmind.open(geolite2.paths.city);
     const geo = lookup.get(ip);
+    console.log("geo", geo);
 
     const { name: browser, os } = platform.parse(req.headers["user-agent"]);
 
