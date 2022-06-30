@@ -8,6 +8,7 @@ import {
   NextPage,
   NextPageContext,
 } from "next";
+import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
 interface Props {
@@ -60,6 +61,17 @@ export async function getServerSideProps(
     });
 
     if (website) {
+      const session = await getSession({ req: context.req });
+
+      if (website.ownerId != session?.user.id) {
+        return {
+          redirect: {
+            destination: "/",
+            permanent: true,
+          },
+        };
+      }
+
       return {
         props: {
           website: website,
