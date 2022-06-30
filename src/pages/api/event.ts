@@ -35,13 +35,14 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     let ref = undefined;
     if (data.r) {
+      const refUrl = new URL(data.r).origin;
       const refFound = await prisma.referrer.findUnique({
-        where: { domain: data.r },
+        where: { domain: refUrl },
       });
 
       if (refFound) {
         if (Date.now() - refFound.updatedAt.getTime() > 1000 * 60 * 10) {
-          const websiteData = await getWebsiteData(data.r);
+          const websiteData = await getWebsiteData(refUrl);
 
           if (websiteData) {
             await prisma.referrer.update({
@@ -57,12 +58,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
         ref = refFound;
       } else {
-        const websiteData = await getWebsiteData(data.r);
+        const websiteData = await getWebsiteData(refUrl);
 
         if (websiteData) {
           ref = await prisma.referrer.create({
             data: {
-              domain: data.r,
+              domain: refUrl,
               icon: websiteData.icon,
               title: websiteData.title,
             },

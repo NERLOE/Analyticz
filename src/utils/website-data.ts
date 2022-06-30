@@ -36,8 +36,8 @@ export async function getWebsiteData(url: string): Promise<{
   title: string;
   icon?: string;
 } | null> {
-  const isUrl = z.string().url().safeParse(url);
-  if (!isUrl.success) {
+  const isUrl = z.string().url();
+  if (!isUrl.safeParse(url).success) {
     console.error(`Tried parsing ${url} as URL, but failed`);
     return null;
   }
@@ -47,6 +47,11 @@ export async function getWebsiteData(url: string): Promise<{
     const $ = cheerio.load(html);
     const icons = getIconsFromHtml($);
     const title = getTitleFromHtml($);
+
+    let icon = icons[0];
+    if (icon && !isUrl.safeParse(icon).success) {
+      icon = `${new URL(url).origin}${icon}`;
+    }
 
     return { icon: icons[0], title: title };
   } catch (err) {
