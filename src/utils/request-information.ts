@@ -7,5 +7,5 @@ export const getIpFromRequest = (req: NextApiRequest) => {
     req.connection?.remoteAddress ||
     req.socket?.remoteAddress;
 
-  return ip ?? null;
+  return ip ?? "";
 };
