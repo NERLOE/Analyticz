@@ -4,12 +4,9 @@ import { trpc } from "@utils/trpc";
 import {
   GetServerSidePropsContext,
   GetServerSidePropsResult,
-  GetStaticPropsContext,
   NextPage,
-  NextPageContext,
 } from "next";
 import { unstable_getServerSession as getServerSession } from "next-auth";
-import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { authOptions } from "./api/auth/[...nextauth]";
 
@@ -43,7 +40,7 @@ const AnalyticsPage: NextPage<Props> = () => {
       <p>{website.domain}</p>
       {visits.map((visit) => {
         return (
-          <p key={visit.path}>
+          <p className="text-white" key={visit.path}>
             {visit.path}: {visit._count.id}
           </p>
         );
