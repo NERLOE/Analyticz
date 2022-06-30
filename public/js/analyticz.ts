@@ -52,7 +52,7 @@ declare global {
       d: scriptEl.getAttribute("data-domain"),
       r: document.referrer || null,
       w: window.innerWidth,
-      p: window.navigator,
+      p: window.navigator.userAgent,
     };
 
     const xhr = new XMLHttpRequest();
