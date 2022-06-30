@@ -34,7 +34,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const ip = getIpFromRequest(req);
     const lookup = await maxmind.open(geolite2.paths.city);
     const geo = lookup.get(ip) as (CityResponse & CountryResponse) | null;
-    console.log("geo", geo);
 
     const userAgent = req.headers["user-agent"];
     const { name: browser, os } = platform.parse(userAgent);
@@ -44,8 +43,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         domain: data.d,
       },
     });
-
-    console.log("website", website);
 
     if (!website)
       return res
@@ -93,15 +90,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     const url = new URL(data.u);
     const visitorId = x64.hash128(
-      [
-        userAgent,
-        geo?.city?.geoname_id ?? undefined,
-        geo?.continent?.geoname_id ?? undefined,
-        geo?.country?.geoname_id ?? undefined,
-        ip,
-        req.headers.accept,
-        req.headers["accept-language"],
-      ]
+      [userAgent, ip, req.headers.accept, req.headers["accept-language"]]
         .filter((x) => x != undefined)
         .join("~~~")
     );

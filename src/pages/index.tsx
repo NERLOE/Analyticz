@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 import { trpc } from "@utils/trpc";
 import Link from "next/link";
+import { signOut } from "next-auth/react";
 
 const Home: NextPage = () => {
   const { data: session } = trpc.useQuery(["auth.getSession"]);
@@ -18,16 +19,16 @@ const Home: NextPage = () => {
             <p className="text-center my-5 text-2xl text-white">
               Welcome, {session.user.name}
             </p>
-            <Link
-              className="text-center text-2xl text-red-500 my-25"
-              href={"/api/auth/signout"}
+            <a
+              className="text-center text-2xl text-red-500 my-5"
+              onClick={() => signOut()}
             >
               Logout
-            </Link>
+            </a>
           </>
         ) : (
           <Link
-            className="text-center text-2xl text-white my-25"
+            className="text-center text-2xl text-white my-10"
             href={"/api/auth/signin"}
           >
             Login
