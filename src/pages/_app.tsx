@@ -20,7 +20,7 @@ const MyApp: AppType = ({
       <Head>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <title>Analyticz.io</title>
-        <link rel="canonical" href={process.env.PROD_URL + router.pathname} />
+        <link rel="canonical" href={process.env.SITE_URL + router.pathname} />
         <meta name="title" content="Analyticz.io" />
         <meta name="twitter:title" content="Analyticz.io" />
         <meta
@@ -51,8 +51,8 @@ const getBaseUrl = () => {
     return "";
   }
   if (process.browser) return ""; // Browser should use current path
-  if (process.env.NODE_ENV === "production" && process.env.PROD_URL) {
-    return `${process.env.PROD_URL}`;
+  if (process.env.NODE_ENV === "production" && process.env.SITE_URL) {
+    return `${process.env.SITE_URL}`;
   }
 
   return `http://localhost:${process.env.PORT ?? 3000}`; // dev SSR should use localhost

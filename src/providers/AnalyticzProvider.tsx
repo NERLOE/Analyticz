@@ -15,7 +15,7 @@ interface ProviderProps {
 }
 
 const AnalyticzProvider: React.FC<ProviderProps> = (props) => {
-  const domain = process.env.PROD_URL;
+  const domain = process.env.SITE_URL;
 
   return (
     <>

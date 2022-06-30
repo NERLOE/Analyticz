@@ -8,7 +8,7 @@ const nextConfig = {
     newNextLinkBehavior: true,
   },
   env: {
-    PROD_URL: process.env.PROD_URL,
+    SITE_URL: process.env.SITE_URL,
   },
 };
 
