@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 html {
-  @apply bg-dark-900;
+  @apply bg-gray-900;
 }
 
 @layer components {

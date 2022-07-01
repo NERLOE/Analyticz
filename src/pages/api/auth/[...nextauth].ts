@@ -1,5 +1,8 @@
+import { signIn } from "next-auth/react";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
+import GoogleProvider from "next-auth/providers/google";
+import TwitterProvider from "next-auth/providers/twitter";
 
 // Prisma adapter for NextAuth, optional and can be removed
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
@@ -14,6 +17,8 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.GITHUB_ID,
       clientSecret: process.env.GITHUB_SECRET,
     }),
+    GoogleProvider({ clientId: "", clientSecret: "" }),
+    TwitterProvider({ clientId: "", clientSecret: "", version: "2.0" }),
     // ...add more providers here
   ],
   callbacks: {
@@ -22,6 +27,12 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
+  logger: {
+    warn: (message) => {
+      return;
+    },
+  },
+  useSecureCookies: process.env.NODE_ENV === "production",
   secret: process.env.NEXT_AUTH_SECRET,
   pages: {
     signIn: "/signin",

@@ -19,9 +19,16 @@ const Home: NextPage = () => {
             <p className="text-center my-5 text-2xl text-white">
               Welcome, {session.user.name}
             </p>
+
+            <Link href="/sites">
+              <button className="button">My sites</button>
+            </Link>
+
             <a
               className="text-center text-2xl text-red-500 my-5 cursor-pointer"
-              onClick={() => signOut()}
+              onClick={() =>
+                signOut({ callbackUrl: `${window.location.origin}` })
+              }
             >
               Logout
             </a>

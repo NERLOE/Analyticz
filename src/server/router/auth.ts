@@ -1,3 +1,4 @@
+import { getProviders } from "next-auth/react";
 import { TRPCError } from "@trpc/server";
 import { createRouter } from "./context";
 
@@ -5,6 +6,12 @@ export const authRouter = createRouter()
   .query("getSession", {
     async resolve({ ctx }) {
       return ctx.session;
+    },
+  })
+  .query("getProviders", {
+    async resolve({ ctx }) {
+      const providers = await getProviders();
+      return providers;
     },
   })
   .middleware(async ({ ctx, next }) => {
@@ -18,8 +25,22 @@ export const authRouter = createRouter()
 
     return next();
   })
-  .query("getSecretMessage", {
+  .query("getWebsites", {
     async resolve({ ctx }) {
-      return "You are logged in and can see this secret message!";
+      let lastDay = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+      const websites = await ctx.prisma.website.findMany({
+        where: { ownerId: ctx?.session?.user.id },
+        include: {
+          visits: {
+            where: {
+              visitedAt: {
+                gte: lastDay,
+              },
+            },
+          },
+        },
+      });
+
+      return websites;
     },
   });
