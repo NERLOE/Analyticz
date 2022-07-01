@@ -18,7 +18,11 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GITHUB_SECRET,
     }),
     GoogleProvider({ clientId: "", clientSecret: "" }),
-    TwitterProvider({ clientId: "", clientSecret: "", version: "2.0" }),
+    TwitterProvider({
+      clientId: process.env.TWITTER_ID as string,
+      clientSecret: process.env.TWITTER_SECRET as string,
+      version: "2.0",
+    }),
     // ...add more providers here
   ],
   callbacks: {
