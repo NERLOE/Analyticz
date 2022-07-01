@@ -1,4 +1,3 @@
-import { signIn } from "next-auth/react";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
@@ -17,7 +16,10 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.GITHUB_ID,
       clientSecret: process.env.GITHUB_SECRET,
     }),
-    GoogleProvider({ clientId: "", clientSecret: "" }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_ID as string,
+      clientSecret: process.env.GOOGLE_SECRET as string,
+    }),
     TwitterProvider({
       clientId: process.env.TWITTER_ID as string,
       clientSecret: process.env.TWITTER_SECRET as string,
@@ -25,10 +27,38 @@ export const authOptions: NextAuthOptions = {
     }),
     // ...add more providers here
   ],
+  events: {
+    async linkAccount({ user, account, profile }) {
+      console.log("LINK ACCOUNT", user, account, profile);
+    },
+  },
   callbacks: {
     async session({ session, token, user }) {
       session.user = user as User;
       return session;
+    },
+    async signIn({ account, profile }) {
+      const user = await prisma.user.findUnique({
+        where: { email: profile.email },
+      });
+      if (!user) return true;
+      console.log("signing in", user, account, profile);
+
+      const acc = await prisma.account.findFirst({
+        where: {
+          userId: user.id,
+          provider: account.provider,
+        },
+      });
+
+      if (acc) {
+        return true;
+      } else {
+        console.log("data", { ...account, userId: user.id });
+        await prisma.account.create({ data: { ...account, userId: user.id } });
+
+        return true;
+      }
     },
   },
   logger: {
