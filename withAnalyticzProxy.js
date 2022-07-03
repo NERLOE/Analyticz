@@ -73,8 +73,6 @@ const withAnalyticzProxy = (options = {}) => {
             scriptName: getRemoteScriptName(domain, domain !== analyticzDomain),
           });
 
-        console.log("source", getScriptPath(options));
-        console.log("destination", getRemoteScript());
         const analyticzRewrites = [
           {
             source: getScriptPath(options),

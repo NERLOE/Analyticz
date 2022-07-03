@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 
 const { withSuperjson } = require("next-superjson");
-const { withAnalyticzProxy } = require("./AnalyticzProvider");
+const { withAnalyticzProxy } = require("./withAnalyticzProxy");
 
 const nextConfig = {
   reactStrictMode: true,
