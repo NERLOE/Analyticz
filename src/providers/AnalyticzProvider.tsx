@@ -1,3 +1,4 @@
+import { NextConfig } from "next";
 import Script from "next/script";
 
 const getRemoteScriptName = (domain: string, selfHosted?: boolean) =>
@@ -7,6 +8,14 @@ const getScriptPath = (options: { scriptName: string }) => {
   const basePath = `/js/${[options.scriptName ?? "script"].join(".")}.js`;
 
   return basePath;
+};
+
+export const withAnalyticzProxy = () => {
+  return (nextConfig: NextConfig) => {
+    return {
+      ...nextConfig,
+    };
+  };
 };
 
 interface ProviderProps {
