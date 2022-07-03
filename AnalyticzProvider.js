@@ -1,6 +1,3 @@
-import getConfig from "next/config";
-import Script from "next/script";
-
 const getRemoteScriptName = (domain, selfHosted) => "analyticz";
 
 const getScriptPath = (options) => {
@@ -66,36 +63,3 @@ export const withAnalyticzProxy = (options = {}) => {
     };
   };
 };
-
-const AnalyticzProvider = (props) => {
-  const { enabled = process.env.NODE_ENV === "production" } = props;
-  const domain = getDomain(props);
-  const proxyOptions =
-    getConfig().publicRuntimeConfig?.nextAnalyticzPublicProxyOptions;
-
-  return (
-    <>
-      {enabled && (
-        <Script
-          async
-          defer
-          data-api={proxyOptions ? getApiEndpoint(proxyOptions) : undefined}
-          data-domain={props.domain}
-          src={
-            (proxyOptions ? "" : domain) +
-            getScriptPath({
-              ...proxyOptions,
-              scriptName: proxyOptions
-                ? proxyOptions.scriptName
-                : getRemoteScriptName(props.domain),
-            })
-          }
-        />
-      )}
-
-      {props.children}
-    </>
-  );
-};
-
-export default AnalyticzProvider;
