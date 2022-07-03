@@ -5,14 +5,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.withAnalyticzProxy = void 0;
 
-var _config = _interopRequireDefault(require("next/config"));
-
-var _script = _interopRequireDefault(require("next/script"));
-
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
-
 const getRemoteScriptName = (domain, selfHosted) => "analyticz";
 
 const getScriptPath = (options) => {
@@ -73,7 +65,7 @@ const withAnalyticzProxy = (options = {}) => {
       rewrites: async () => {
         var _nextConfig$rewrites;
 
-        const domain = analyticzDomain;
+        const domain = getDomain(options);
 
         const getRemoteScript = () =>
           domain +

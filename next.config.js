@@ -13,6 +13,4 @@ const nextConfig = {
   },
 };
 
-module.exports = withAnalyticzProxy({
-  customDomain: "https://analyticz.marcusnerloe.dk",
-})(withSuperjson()(nextConfig));
+module.exports = withAnalyticzProxy()(withSuperjson()(nextConfig));
