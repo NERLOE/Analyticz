@@ -27,7 +27,7 @@ const getApiEndpoint = (options: NextAnalyticzPublicProxyOptions) =>
 
 export const withAnalyticzProxy = (options: NextAnalyticzProxyOptions = {}) => {
   return (nextConfig: NextConfig) => {
-    const nextPlausiblePublicProxyOptions: NextAnalyticzPublicProxyOptions = {
+    const nextAnalyticzPublicProxyOptions: NextAnalyticzPublicProxyOptions = {
       ...options,
       trailingSlash: !!nextConfig.trailingSlash,
     };
@@ -36,7 +36,7 @@ export const withAnalyticzProxy = (options: NextAnalyticzProxyOptions = {}) => {
       ...nextConfig,
       publicRuntimeConfig: {
         ...nextConfig.publicRuntimeConfig,
-        nextPlausiblePublicProxyOptions,
+        nextAnalyticzPublicProxyOptions,
       },
       async rewrites() {
         const domain = getDomain(options);
@@ -52,7 +52,7 @@ export const withAnalyticzProxy = (options: NextAnalyticzProxyOptions = {}) => {
             destination: getRemoteScript(),
           },
           {
-            source: getApiEndpoint(nextPlausiblePublicProxyOptions),
+            source: getApiEndpoint(nextAnalyticzPublicProxyOptions),
             destination: `${domain}/api/event`,
           },
         ];
@@ -91,7 +91,7 @@ const AnalyticzProvider: React.FC<ProviderProps> = (props) => {
   const { enabled = process.env.NODE_ENV === "production" } = props;
   const domain = getDomain(props);
   const proxyOptions: NextAnalyticzPublicProxyOptions =
-    getConfig().publicRuntimeConfig?.nextAnalyticzPublicProxyOptions;
+    getConfig()?.publicRuntimeConfig?.nextAnalyticzPublicProxyOptions;
 
   return (
     <>

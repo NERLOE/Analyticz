@@ -189,13 +189,13 @@ var withAnalyticzProxy = function (options) {
     options = {};
   }
   return function (nextConfig) {
-    var nextPlausiblePublicProxyOptions = __assign(__assign({}, options), {
+    var nextAnalyticzPublicProxyOptions = __assign(__assign({}, options), {
       trailingSlash: !!nextConfig.trailingSlash,
     });
     return __assign(__assign({}, nextConfig), {
       publicRuntimeConfig: __assign(
         __assign({}, nextConfig.publicRuntimeConfig),
-        { nextPlausiblePublicProxyOptions: nextPlausiblePublicProxyOptions }
+        { nextAnalyticzPublicProxyOptions: nextAnalyticzPublicProxyOptions }
       ),
       rewrites: function () {
         var _a;
@@ -222,7 +222,7 @@ var withAnalyticzProxy = function (options) {
                     destination: getRemoteScript(),
                   },
                   {
-                    source: getApiEndpoint(nextPlausiblePublicProxyOptions),
+                    source: getApiEndpoint(nextAnalyticzPublicProxyOptions),
                     destination: "".concat(domain, "/api/event"),
                   },
                 ];
