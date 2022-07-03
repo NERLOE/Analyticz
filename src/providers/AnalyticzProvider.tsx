@@ -97,6 +97,9 @@ const AnalyticzProvider: React.FC<ProviderProps> = (props) => {
   const proxyOptions: NextAnalyticzPublicProxyOptions =
     getConfig()?.publicRuntimeConfig?.nextAnalyticzPublicProxyOptions;
 
+  console.log("proxyOptions", proxyOptions);
+  console.log("nextConfig", getConfig());
+
   return (
     <>
       {enabled && (
