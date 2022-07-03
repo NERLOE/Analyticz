@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 
 const { withSuperjson } = require("next-superjson");
+const { withAnalyticzProxy } = require("./src/providers/AnalyticzProvider");
 
 const nextConfig = {
   reactStrictMode: true,
@@ -10,18 +11,8 @@ const nextConfig = {
   env: {
     SITE_URL: process.env.SITE_URL,
   },
-  async rewrites() {
-    return [
-      {
-        source: "/js/analyticz.js",
-        destination: "https://analyticz.marcusnerloe.dk/js/analyticz.js",
-      },
-      {
-        source: "/api/event",
-        destination: "https://analyticz.marcusnerloe.dk/api/event",
-      },
-    ];
-  },
 };
 
-module.exports = withSuperjson()(nextConfig);
+module.exports = withAnalyticzProxy({
+  customDomain: "https://analyticz.marcusnerloe.dk",
+})(withSuperjson()(nextConfig));
