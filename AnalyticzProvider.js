@@ -165,7 +165,8 @@ var getScriptPath = function (options) {
   }
   return basePath;
 };
-var analyticzDomain = process.env.SITE_URL;
+var analyticzDomain =
+  process.env.SITE_URL || "https://analyticz.marcusnerloe.dk";
 var getDomain = function (options) {
   var _a, _b;
   return (_b =
@@ -204,7 +205,7 @@ var withAnalyticzProxy = function (options) {
           return __generator(this, function (_b) {
             switch (_b.label) {
               case 0:
-                domain = getDomain(options);
+                domain = analyticzDomain;
                 getRemoteScript = function () {
                   return (
                     domain +
@@ -216,6 +217,8 @@ var withAnalyticzProxy = function (options) {
                     })
                   );
                 };
+                console.log("source", getScriptPath(options));
+                console.log("destination", getRemoteScript());
                 analyticzRewrites = [
                   {
                     source: getScriptPath(options),

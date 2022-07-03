@@ -15,7 +15,8 @@ const getScriptPath = (options: NextAnalyticzProxyOptions) => {
   return basePath;
 };
 
-const analyticzDomain = process.env.SITE_URL;
+const analyticzDomain =
+  process.env.SITE_URL || "https://analyticz.marcusnerloe.dk";
 
 const getDomain = (options: { customDomain?: string }) =>
   options.customDomain ?? analyticzDomain ?? "";
@@ -39,14 +40,15 @@ export const withAnalyticzProxy = (options: NextAnalyticzProxyOptions = {}) => {
         nextAnalyticzPublicProxyOptions,
       },
       async rewrites() {
-        const domain = getDomain(options);
+        const domain = analyticzDomain;
         const getRemoteScript = () =>
           domain +
           getScriptPath({
             scriptName: getRemoteScriptName(domain, domain !== analyticzDomain),
           });
 
-        console.log("remoteScript", getRemoteScript());
+        console.log("source", getScriptPath(options));
+        console.log("destination", getRemoteScript());
 
         const analyticzRewrites = [
           {
