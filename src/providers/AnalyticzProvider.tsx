@@ -39,7 +39,7 @@ export const withAnalyticzProxy = (options: NextAnalyticzProxyOptions = {}) => {
         ...nextConfig.publicRuntimeConfig,
         nextAnalyticzPublicProxyOptions,
       },
-      async rewrites() {
+      rewrites: async () => {
         const domain = analyticzDomain;
         const getRemoteScript = () =>
           domain +
@@ -68,6 +68,7 @@ export const withAnalyticzProxy = (options: NextAnalyticzProxyOptions = {}) => {
           return rewrites.concat(analyticzRewrites);
         } else {
           rewrites.afterFiles = rewrites.afterFiles.concat(analyticzRewrites);
+          return rewrites;
         }
       },
     };
