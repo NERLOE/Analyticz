@@ -27,7 +27,7 @@ const getApiEndpoint = (options: NextAnalyticzPublicProxyOptions) =>
   }`;
 
 export const withAnalyticzProxy = (options: NextAnalyticzProxyOptions = {}) => {
-  return (nextConfig: NextConfig) => {
+  return (nextConfig: NextConfig): NextConfig => {
     const nextAnalyticzPublicProxyOptions: NextAnalyticzPublicProxyOptions = {
       ...options,
       trailingSlash: !!nextConfig.trailingSlash,
