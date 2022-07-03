@@ -238,10 +238,19 @@ var withAnalyticzProxy = function (options) {
               case 1:
                 rewrites = _b.sent();
                 if (!rewrites) {
+                  console.log("no rewrites", analyticzRewrites);
                   return [2 /*return*/, analyticzRewrites];
                 } else if (Array.isArray(rewrites)) {
+                  console.log(
+                    "returning rewrites",
+                    rewrites.concat(analyticzRewrites)
+                  );
                   return [2 /*return*/, rewrites.concat(analyticzRewrites)];
                 } else {
+                  console.log(
+                    "else afterFiles",
+                    rewrites.afterFiles.concat(analyticzRewrites)
+                  );
                   rewrites.afterFiles =
                     rewrites.afterFiles.concat(analyticzRewrites);
                 }
