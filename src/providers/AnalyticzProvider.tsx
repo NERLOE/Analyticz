@@ -46,6 +46,8 @@ export const withAnalyticzProxy = (options: NextAnalyticzProxyOptions = {}) => {
             scriptName: getRemoteScriptName(domain, domain !== analyticzDomain),
           });
 
+        console.log("remoteScript", getRemoteScript());
+
         const analyticzRewrites = [
           {
             source: getScriptPath(options),
