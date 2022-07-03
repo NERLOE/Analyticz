@@ -94,9 +94,9 @@ interface ProviderProps {
 
 const AnalyticzProvider: React.FC<ProviderProps> = (props) => {
   const { enabled = process.env.NODE_ENV === "production" } = props;
-  const domain = getDomain(props);
   const proxyOptions: NextAnalyticzPublicProxyOptions =
     getConfig()?.publicRuntimeConfig?.nextAnalyticzPublicProxyOptions;
+  const domain = getDomain({ ...proxyOptions, ...props });
 
   console.log("proxyOptions", proxyOptions);
   console.log("nextConfig", getConfig());
