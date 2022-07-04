@@ -4,8 +4,7 @@ export const getIpFromRequest = (req: NextApiRequest) => {
   const forwarded = req.headers["x-forwarded-for"] as string;
 
   const ip =
-    (req.headers["x-real-ip"] as string) ||
-    forwarded.split(",").pop()?.trim() ||
+    forwarded.split(",")[0]?.trim() ||
     req.connection?.remoteAddress ||
     req.socket?.remoteAddress;
 
