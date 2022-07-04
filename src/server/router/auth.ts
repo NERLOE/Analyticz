@@ -32,6 +32,7 @@ export const authRouter = createRouter()
         where: { ownerId: ctx?.session?.user.id },
         include: {
           visits: {
+            distinct: ["visitorId"],
             where: {
               visitedAt: {
                 gte: lastDay,
