@@ -18,7 +18,7 @@ export const analyticsRouter = createRouter()
     }),
     async resolve({ ctx, input }) {
       return await ctx.prisma.visit.groupBy({
-        by: ["path", "url"],
+        by: ["path", "id"],
         _count: {
           id: true,
         },
