@@ -2,7 +2,10 @@ import { trpc } from "@utils/trpc";
 import Link from "next/link";
 
 const Sites = () => {
-  const { data: sites } = trpc.useQuery(["auth.getWebsites"]);
+  const q /*{ data: sites }*/ = trpc.useQuery(["auth.getWebsites"]);
+  const { data: sites } = q;
+
+  console.log("restating", q);
 
   return (
     <div className="grid grid-cols-4 gap-10">

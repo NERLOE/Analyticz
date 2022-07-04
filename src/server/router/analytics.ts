@@ -24,6 +24,7 @@ export const analyticsRouter = createRouter()
         },
         where: { websiteId: input.websiteId },
         orderBy: {
+          // Prisma can only order by one column
           _count: { id: "desc" },
         },
       });

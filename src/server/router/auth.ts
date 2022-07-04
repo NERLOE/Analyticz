@@ -5,6 +5,7 @@ import { createRouter } from "./context";
 export const authRouter = createRouter()
   .query("getSession", {
     async resolve({ ctx }) {
+      console.log("Getting session");
       return ctx.session;
     },
   })

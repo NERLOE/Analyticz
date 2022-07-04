@@ -45,6 +45,7 @@ export async function getWebsiteData(url: string): Promise<{
 
   try {
     const html = (await axios.get(url)).data;
+    console.log(`website-data html`, html);
     const $ = cheerio.load(html);
     const icons = getIconsFromHtml($);
     const title = getTitleFromHtml($);

@@ -75,6 +75,8 @@ export async function getServerSideProps(
         authOptions
       );
 
+      console.log("Getting session ssp");
+
       if (
         website.ownerId != session?.user.id &&
         process.env.NODE_ENV === "production"
