@@ -30,7 +30,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   });
 
   try {
-    console.log("req", req);
     const data = schema.parse(JSON.parse(req.body));
     const ip = getIpFromRequest(req);
     const lookup = await maxmind.open(geolite2.paths.city);
@@ -91,7 +90,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     const url = new URL(data.u);
     const visitorId = x64.hash128(
-      [userAgent, ip, req.headers.accept, req.headers["accept-language"]]
+      [userAgent, ip, req.headers.accept]
         .filter((x) => x != undefined)
         .join("~~~")
     );
