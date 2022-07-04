@@ -101,6 +101,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         data: {
           url: data.u,
           path: url.pathname,
+          origin: url.origin,
           websiteId: website.id,
           referrerId: ref?.id,
           os: os?.family,
