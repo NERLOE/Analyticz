@@ -46,7 +46,7 @@ const AnalyticsPage: NextPage<Props> = () => {
             <a
               target={"_blank"}
               rel="noreferrer"
-              href={website.domain + visit.path}
+              href={visit.origin + visit.path}
             >
               {visit.path}:
             </a>{" "}
