@@ -3,24 +3,24 @@ import axios from "axios";
 import cheerio, { CheerioAPI } from "cheerio";
 
 const iconSelectors = [
-  "link[rel='icon' i][href]",
-  "link[rel='shortcut icon' i][href]",
-  "link[rel='apple-touch-icon' i][href]",
-  "link[rel='apple-touch-icon-precomposed' i][href]",
-  "link[rel='apple-touch-startup-image' i][href]",
-  "link[rel='mask-icon' i][href]",
-  "link[rel='fluid-icon' i][href]",
-  "meta[name='msapplication-TileImage' i][content]",
-  "meta[name='twitter:image' i][content]",
-  "meta[property='og:image' i][content]",
-  "meta[itemprop='image' i][content]",
+  { selector: "link[rel='icon' i]", attr: "href" },
+  { selector: "link[rel='shortcut icon' i]", attr: "href" },
+  { selector: "link[rel='apple-touch-icon' i]", attr: "href" },
+  { selector: "link[rel='apple-touch-icon-precomposed' i]", attr: "href" },
+  { selector: "link[rel='apple-touch-startup-image' i]", attr: "href" },
+  { selector: "link[rel='mask-icon' i]", attr: "href" },
+  { selector: "link[rel='fluid-icon' i]", attr: "href" },
+  { selector: "meta[name='msapplication-TileImage' i]", attr: "content" },
+  { selector: "meta[name='twitter:image' i]", attr: "content" },
+  { selector: "meta[property='og:image' i]", attr: "content" },
+  { selector: "meta[itemprop='image' i]", attr: "content" },
 ];
 
 function getIconsFromHtml($: CheerioAPI) {
   const icons: string[] = [];
 
-  $(iconSelectors.join()).each((i, el) => {
-    const src = $(el).attr("href");
+  iconSelectors.forEach((sel, index) => {
+    const src = $(sel.selector).attr(sel.attr);
     if (src) icons.push(src);
   });
 
