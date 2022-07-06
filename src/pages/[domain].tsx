@@ -18,7 +18,7 @@ const AnalyticsPage: NextPage<Props> = () => {
   const router = useRouter();
 
   const { data: website } = trpc.useQuery([
-    "analytics.getWebsite",
+    "sites.getWebsite",
     {
       domain: router.query.domain as string,
     },
@@ -27,7 +27,7 @@ const AnalyticsPage: NextPage<Props> = () => {
   if (!website) return null;
 
   const { data: visits } = trpc.useQuery([
-    "analytics.getVisits",
+    "sites.getVisits",
     { websiteId: website.id },
   ]);
 
@@ -74,8 +74,6 @@ export async function getServerSideProps(
         context.res,
         authOptions
       );
-
-      console.log("Getting session ssp");
 
       if (
         website.ownerId != session?.user.id &&

@@ -1,14 +1,17 @@
 // src/pages/_app.tsx
 import { withTRPC } from "@trpc/next";
-import type { AppRouter } from "../server/router";
+import type { AppRouter } from "@server/router";
 import type { AppType } from "next/dist/shared/lib/utils";
 import superjson from "superjson";
 import { SessionProvider } from "next-auth/react";
 import "../styles/globals.css";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import AnalyticzProvider from "src/providers/AnalyticzProvider";
+import AnalyticzProvider from "@providers/AnalyticzProvider";
 
+/* 
+  Font Awesome Initialization
+*/
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 config.autoAddCss = false;

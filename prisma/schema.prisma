@@ -80,6 +80,7 @@ model Website {
     ownerId String
     owner   User    @relation(fields: [ownerId], references: [id])
     domain  String  @unique
+    icon    String?
     visits  Visit[]
 }
 

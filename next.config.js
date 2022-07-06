@@ -7,6 +7,9 @@ const nextConfig = {
   reactStrictMode: true,
   experimental: {
     newNextLinkBehavior: true,
+    images: {
+      allowFutureImage: true,
+    },
   },
   env: {
     SITE_URL: process.env.SITE_URL,

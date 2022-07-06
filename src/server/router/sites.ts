@@ -1,7 +1,8 @@
 import { createRouter } from "./context";
 import { z } from "zod";
+import { getWebsiteData } from "@utils/website-data";
 
-export const analyticsRouter = createRouter()
+export const sitesRouter = createRouter()
   .query("getWebsite", {
     input: z.object({
       domain: z.string(),
