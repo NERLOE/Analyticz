@@ -4,7 +4,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "@server/db/client";
 import z from "zod";
 import { LogEvents } from "@constants/events";
-import { getWebsiteData } from "@utils/website-data";
+import { getWebsiteData, shouldBeUpdated } from "@utils/website-data";
 import platform from "platform";
 import NextCors from "nextjs-cors";
 import geolite2 from "geolite2";
@@ -57,7 +57,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       });
 
       if (refFound) {
-        if (Date.now() - refFound.updatedAt.getTime() > 1000 * 60 * 10) {
+        if (shouldBeUpdated(refFound.updatedAt)) {
           const websiteData = await getWebsiteData(refUrl);
 
           if (websiteData) {

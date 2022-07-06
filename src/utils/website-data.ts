@@ -37,7 +37,7 @@ function getTitleFromHtml($: CheerioAPI) {
 
 export async function getWebsiteData(url: string): Promise<{
   title: string;
-  icon?: string;
+  icon: string | null;
 } | null> {
   const isUrl = z.string().url();
   if (!isUrl.safeParse(url).success) {
@@ -52,7 +52,7 @@ export async function getWebsiteData(url: string): Promise<{
     const icons = getIconsFromHtml($);
     const title = getTitleFromHtml($);
 
-    let icon = icons[0];
+    let icon = icons[0] ?? null;
     if (icon && !isUrl.safeParse(icon).success) {
       icon = `${new URL(url).origin}${icon}`;
     }
@@ -65,4 +65,8 @@ export async function getWebsiteData(url: string): Promise<{
   } catch (err) {
     return null;
   }
+}
+
+export function shouldBeUpdated(lastUpdate: Date) {
+  return Date.now() - lastUpdate.getTime() > 1000 * 60 * 10;
 }

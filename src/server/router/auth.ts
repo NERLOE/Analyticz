@@ -3,7 +3,7 @@ import { TRPCError } from "@trpc/server";
 import { createRouter } from "./context";
 import { Session } from "next-auth";
 import { prisma } from "@server/db/client";
-import { getWebsiteData } from "@utils/website-data";
+import { getWebsiteData, shouldBeUpdated } from "@utils/website-data";
 import { z } from "zod";
 import { CreateSiteSchema } from "@constants/schemas";
 
@@ -65,7 +65,7 @@ export const authRouter = createRouter()
 export const getUserWebsites = async (session?: Session | null) => {
   let lastDay = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
 
-  return await prisma.website.findMany({
+  let websites = await prisma.website.findMany({
     where: { ownerId: session?.user.id },
     include: {
       visits: {
@@ -78,4 +78,25 @@ export const getUserWebsites = async (session?: Session | null) => {
       },
     },
   });
+
+  websites = await Promise.all(
+    websites.map(async (site) => {
+      if (shouldBeUpdated(site.updatedAt)) {
+        const websiteData = await getWebsiteData(`https://${site.domain}`);
+
+        if (!websiteData) return site;
+
+        await prisma.website.update({
+          where: { id: site.id },
+          data: { icon: websiteData?.icon, updatedAt: new Date() },
+        });
+
+        return { ...site, icon: websiteData.icon };
+      }
+
+      return site;
+    })
+  );
+
+  return websites;
 };

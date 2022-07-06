@@ -76,12 +76,13 @@ model Visit {
 }
 
 model Website {
-    id      String  @id @default(cuid())
-    ownerId String
-    owner   User    @relation(fields: [ownerId], references: [id])
-    domain  String  @unique
-    icon    String?
-    visits  Visit[]
+    id        String   @id @default(cuid())
+    ownerId   String
+    owner     User     @relation(fields: [ownerId], references: [id])
+    domain    String   @unique
+    icon      String?
+    updatedAt DateTime @default(now())
+    visits    Visit[]
 }
 
 model Referrer {
