@@ -24,7 +24,9 @@ function getIconsFromHtml($: CheerioAPI) {
     if (src) icons.push(src);
   });
 
-  return icons;
+  return icons.sort((a, b) =>
+    a.endsWith(".svg") > b.endsWith(".svg") ? -1 : 1
+  );
 }
 
 function getTitleFromHtml($: CheerioAPI) {
