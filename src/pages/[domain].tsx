@@ -137,14 +137,20 @@ const AnalyticsPage: NextPage<Props> = () => {
           keyTitle="Screen size"
           valueTitle="Visitors"
           highestValue={devices[0]?.value ?? 0}
-          list={devices.map((device) => {
-            return {
-              title: device.title,
-              link: device.link,
-              value: device.value,
-              icon: getDeviceIcon(device.icon as DeviceName),
-            };
-          })}
+          list={(() => {
+            const visitSum = devices.reduce((a, b) => a + b.value, 0);
+            return devices.map((device) => {
+              return {
+                title: device.title,
+                link: device.link,
+                value: device.value,
+                valueText: `${device.value} (${Math.round(
+                  (device.value / visitSum) * 100
+                )}%)`,
+                icon: getDeviceIcon(device.icon as DeviceName),
+              };
+            });
+          })()}
         />
       </div>
 

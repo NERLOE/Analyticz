@@ -7,6 +7,7 @@ export type StatsCardData = {
   title: string;
   link?: string;
   value: number;
+  valueText?: string;
   icon?: ReactNode | null;
 };
 
@@ -72,7 +73,7 @@ const StatsCard = ({
             </a>
 
             <span className="font-medium text-gray-200 w-20 text-right">
-              {data.value}
+              {data.valueText ?? data.value}
             </span>
           </div>
         );
