@@ -30,7 +30,7 @@ function getIconsFromHtml($: CheerioAPI) {
 }
 
 function getTitleFromHtml($: CheerioAPI) {
-  const title = $("title").text();
+  const title = $("head title").first().text();
 
   return title;
 }
@@ -47,7 +47,7 @@ export async function getWebsiteData(url: string): Promise<{
 
   try {
     const html = (await axios.get(url)).data;
-    console.log(`website-data html`, html);
+    //console.log(`website-data html`, html);
     const $ = cheerio.load(html);
     const icons = getIconsFromHtml($);
     const title = getTitleFromHtml($);
@@ -56,6 +56,9 @@ export async function getWebsiteData(url: string): Promise<{
     if (icon && !isUrl.safeParse(icon).success) {
       icon = `${new URL(url).origin}${icon}`;
     }
+
+    console.log("icon", icon);
+    console.log("title", title);
 
     if (!icon) {
       console.log(`Couldn't find any icon for url, ${url}`, icons);

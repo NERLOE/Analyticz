@@ -1,6 +1,6 @@
 import { createRouter } from "./context";
 import { z } from "zod";
-import { getWebsiteData } from "@utils/website-data";
+import { getWebsiteData, shouldBeUpdated } from "@utils/website-data";
 import { TRPCError } from "@trpc/server";
 import { getDevice } from "@utils/request-information";
 import { StatsCardData } from "@components/StatsCard/StatsCard";
@@ -110,6 +110,24 @@ export const sitesRouter = createRouter()
       return (
         await Promise.all(
           sources.map(async (source) => {
+            let referrer = source.referrer;
+            if (referrer) {
+              if (shouldBeUpdated(referrer.updatedAt)) {
+                const websiteData = await getWebsiteData(referrer.domain);
+
+                if (websiteData) {
+                  referrer = await ctx.prisma.referrer.update({
+                    where: { id: referrer.id },
+                    data: {
+                      updatedAt: new Date(),
+                      icon: websiteData.icon,
+                      title: websiteData.title,
+                    },
+                  });
+                }
+              }
+            }
+
             const visitors = await ctx.prisma.visit.findMany({
               distinct: ["visitorId"],
               include: {
@@ -119,9 +137,11 @@ export const sitesRouter = createRouter()
             });
 
             return {
-              title: source.referrer ? source.referrer.title : "None / Direct",
-              link: source.referrer ? source.referrer.domain : undefined,
-              icon: source.referrer ? source.referrer.icon : null,
+              title: referrer
+                ? `${referrer.title} (${referrer.domain.split("//")[1]})`
+                : "None / Direct",
+              link: referrer ? referrer.domain : undefined,
+              icon: referrer ? referrer.icon : null,
               value: visitors.length,
             };
           })
