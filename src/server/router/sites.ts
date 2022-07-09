@@ -93,7 +93,7 @@ export const sitesRouter = createRouter()
         return {
           title: source.referrer ? source.referrer.title : "None / Direct",
           link: source.referrer ? source.referrer.domain : null,
-          icon: source.referrer ? source.referrer.icon : null,
+          icon: source.referrer ? source.referrer.icon : undefined,
           value: 1,
         };
       });
