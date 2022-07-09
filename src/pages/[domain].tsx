@@ -73,50 +73,6 @@ const AnalyticsPage: NextPage<Props> = () => {
     { domain: domain },
   ]);
 
-  const highestVisits = useMemo(() => {
-    if (!visits) return 0;
-    let hv = 0;
-
-    visits.forEach((visit) => {
-      if (visit._count.id > hv) hv = visit._count.id;
-    });
-
-    return hv;
-  }, [visits]);
-
-  const highestSources = useMemo(() => {
-    if (!sources) return 0;
-    let hv = 0;
-
-    sources.forEach((data) => {
-      if (data.value > hv) hv = data.value;
-    });
-
-    return hv;
-  }, [sources]);
-
-  const highestCountries = useMemo(() => {
-    if (!countries) return 0;
-    let hv = 0;
-
-    countries.forEach((data) => {
-      if (data.value > hv) hv = data.value;
-    });
-
-    return hv;
-  }, [countries]);
-
-  const highestDevices = useMemo(() => {
-    if (!devices) return 0;
-    let hv = 0;
-
-    devices.forEach((data) => {
-      if (data.value > hv) hv = data.value;
-    });
-
-    return hv;
-  }, [devices]);
-
   if (!website || !visits || !sources || !countries || !devices) return null;
 
   return (
@@ -130,7 +86,7 @@ const AnalyticsPage: NextPage<Props> = () => {
           title="Top Sources"
           keyTitle="Source"
           valueTitle="Visitors"
-          highestValue={highestSources}
+          highestValue={sources[0]?.value ?? 0}
           list={sources.map((x) => {
             return {
               ...x,
@@ -149,7 +105,7 @@ const AnalyticsPage: NextPage<Props> = () => {
           title="Top Pages"
           keyTitle="Page"
           valueTitle="Visitors"
-          highestValue={highestVisits}
+          highestValue={visits[0]?._count.id ?? 0}
           list={visits.map((visit) => {
             return {
               title: visit.path,
@@ -163,7 +119,7 @@ const AnalyticsPage: NextPage<Props> = () => {
           title="Countries"
           keyTitle="Country"
           valueTitle="Visitors"
-          highestValue={highestCountries}
+          highestValue={countries[0]?.value ?? 0}
           list={countries.map((country) => {
             return {
               title: country.title,
@@ -180,7 +136,7 @@ const AnalyticsPage: NextPage<Props> = () => {
           title="Devices"
           keyTitle="Screen size"
           valueTitle="Visitors"
-          highestValue={highestDevices}
+          highestValue={devices[0]?.value ?? 0}
           list={devices.map((device) => {
             return {
               title: device.title,
