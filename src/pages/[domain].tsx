@@ -55,7 +55,7 @@ const AnalyticsPage: NextPage<Props> = () => {
 
   console.log(website, visits, highestVisits);
 
-  if (!website || !visits) return null;
+  if (!website || !visits || !sources) return null;
 
   return (
     <div>
