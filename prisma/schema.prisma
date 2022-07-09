@@ -58,21 +58,22 @@ model VerificationToken {
 }
 
 model Visit {
-    id         String    @id @default(cuid())
-    url        String
-    path       String
-    origin     String
-    websiteId  String
-    website    Website   @relation(fields: [websiteId], references: [id], onDelete: Cascade)
-    referrerId String?
-    referrer   Referrer? @relation(fields: [referrerId], references: [id], onDelete: Cascade)
-    os         String?
-    browser    String?
-    ip         String?
-    country    String?
-    city       String?
-    visitorId  String?
-    visitedAt  DateTime  @default(now())
+    id          String    @id @default(cuid())
+    url         String
+    path        String
+    origin      String
+    websiteId   String
+    website     Website   @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+    referrerId  String?
+    referrer    Referrer? @relation(fields: [referrerId], references: [id], onDelete: Cascade)
+    os          String?
+    browser     String?
+    ip          String?
+    country     String?
+    city        String?
+    screenWidth Int?
+    visitorId   String?
+    visitedAt   DateTime  @default(now())
 }
 
 model Website {

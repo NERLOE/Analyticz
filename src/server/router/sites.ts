@@ -24,6 +24,13 @@ export const sitesRouter = createRouter()
         where: { domain: input.domain },
       });
 
+      if (!website) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Website not found",
+        });
+      }
+
       if (website.ownerId !== ctx.session?.user.id) {
         throw new TRPCError({ code: "UNAUTHORIZED" });
       }
@@ -39,6 +46,13 @@ export const sitesRouter = createRouter()
       const website = await ctx.prisma.website.findUnique({
         where: { domain: input.domain },
       });
+
+      if (!website) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Website not found",
+        });
+      }
 
       if (website.ownerId !== ctx.session?.user.id) {
         throw new TRPCError({
@@ -70,6 +84,13 @@ export const sitesRouter = createRouter()
       const website = await ctx.prisma.website.findUnique({
         where: { domain: input.domain },
       });
+
+      if (!website) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Website not found",
+        });
+      }
 
       if (website.ownerId !== ctx.session?.user.id) {
         throw new TRPCError({
