@@ -61,11 +61,6 @@ export const authOptions: NextAuthOptions = {
       }
     },
   },
-  logger: {
-    warn: (message) => {
-      return;
-    },
-  },
   useSecureCookies: process.env.NODE_ENV === "production",
   secret: process.env.NEXT_AUTH_SECRET,
   pages: {

@@ -76,7 +76,7 @@ const SignIn = () => {
               <div className="grid grid-cols-2 gap-3 mt-6">
                 {providers &&
                   Object.values(providers).map((provider) => {
-                    if (provider.id == "github") return null; // Disabled this when adding username, and password credentials
+                    if (provider.id == "github") return null; // Disable this when adding username, and password credentials
                     const icon =
                       providerIcons[provider.id as BuiltInProviderType];
 
