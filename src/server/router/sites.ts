@@ -92,7 +92,7 @@ export const sitesRouter = createRouter()
         console.log(source);
         return {
           title: source.referrer ? source.referrer.title : "None / Direct",
-          link: source.referrer ? source.referrer.domain : null,
+          link: source.referrer ? source.referrer.domain : undefined,
           icon: source.referrer ? source.referrer.icon : undefined,
           value: 1,
         };

@@ -9,7 +9,7 @@ interface Props {
   highestValue: number;
   list: {
     title: string;
-    link: string;
+    link?: string;
     value: number;
     icon?: string;
   }[];
