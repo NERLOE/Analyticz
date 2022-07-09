@@ -70,6 +70,6 @@ export async function getWebsiteData(url: string): Promise<{
   }
 }
 
-export function shouldBeUpdated(lastUpdate: Date) {
-  return Date.now() - lastUpdate.getTime() > 1000 * 60 * 10;
+export function shouldBeUpdated(lastUpdate: Date, minutes: number = 60) {
+  return Date.now() - lastUpdate.getTime() > 1000 * 60 * minutes;
 }
