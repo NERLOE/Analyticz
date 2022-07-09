@@ -1,3 +1,4 @@
+import Card from "@components/Card/Card";
 import { getUserWebsites } from "@server/router/auth";
 import { trpc } from "@utils/trpc";
 import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
@@ -19,16 +20,16 @@ const Sites = () => {
           <button className="button">Create site</button>
         </Link>
       </div>
-      <div className="grid grid-cols-4 gap-10">
+      <div className="my-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {sites &&
           sites.map((site) => {
             return (
               <Link href={`/${site.domain}`} key={site.id}>
-                <div className="py-2 px-2 text-white bg-gray-800 border-t border-b border-gray-700 shadow sm:px-10 sm:rounded-lg sm:border-r sm:border-l">
+                <Card className="">
                   <div className="flex align-center">
                     {site.icon && (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src={site.icon} alt="icon" className="h-5" />
+                      <img src={site.icon} alt="icon" className="w-5 h-5" />
                     )}{" "}
                     <p>{site.domain}</p>
                   </div>
@@ -37,7 +38,7 @@ const Sites = () => {
                     <span className="font-extrabold">{site.visits.length}</span>{" "}
                     visitors in the last 24h
                   </p>
-                </div>
+                </Card>
               </Link>
             );
           })}

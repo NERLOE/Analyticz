@@ -27,3 +27,15 @@ export const isMobileDevice = (userAgent: string) => {
 
   return isMobile;
 };
+
+export const getDevice = (width: number) => {
+  if (width <= 576) {
+    return "Mobile";
+  } else if (width <= 992) {
+    return "Tablet";
+  } else if (width <= 1440) {
+    return "Laptop";
+  } else {
+    return "Desktop";
+  }
+};

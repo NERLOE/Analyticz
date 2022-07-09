@@ -6,7 +6,13 @@ const Card = (
   const { children } = props;
 
   return (
-    <div className="py-8 px-4 bg-gray-800 border-t border-b border-gray-700 shadow sm:px-10 sm:rounded-lg sm:border-r sm:border-l">
+    <div
+      {...props}
+      className={[
+        "py-8 px-4 bg-gray-800 shadow-xl sm:px-10 sm:rounded-lg ",
+        props.className,
+      ].join(" ")}
+    >
       <div
         {...props}
         className={[

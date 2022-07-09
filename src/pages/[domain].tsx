@@ -1,3 +1,4 @@
+import Card from "@components/Card/Card";
 import { Website } from "@prisma/client";
 import { prisma } from "@server/db/client";
 import { trpc } from "@utils/trpc";
@@ -8,7 +9,11 @@ import {
 } from "next";
 import { unstable_getServerSession as getServerSession } from "next-auth";
 import { useRouter } from "next/router";
+import { useMemo } from "react";
 import { authOptions } from "./api/auth/[...nextauth]";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
+import StatsCard from "@components/StatsCard/StatsCard";
 
 interface Props {
   website: Website;
@@ -16,44 +21,71 @@ interface Props {
 
 const AnalyticsPage: NextPage<Props> = () => {
   const router = useRouter();
+  const domain = router.query.domain as string;
+
+  console.log("domain", domain);
 
   const { data: website } = trpc.useQuery([
     "sites.getWebsite",
     {
-      domain: router.query.domain as string,
+      domain: domain,
     },
   ]);
 
-  if (!website) return null;
-
   const { data: visits } = trpc.useQuery([
     "sites.getVisits",
-    { websiteId: website.id },
+    { domain: domain },
   ]);
 
-  if (!visits) return null;
+  const { data: sources } = trpc.useQuery([
+    "sites.getSources",
+    { domain: domain },
+  ]);
 
-  console.log(visits);
+  const highestVisits = useMemo(() => {
+    if (!visits) return 0;
+    let hv = 0;
+
+    visits.forEach((visit) => {
+      if (visit._count.id > hv) hv = visit._count.id;
+    });
+
+    return hv;
+  }, [visits]);
+
+  console.log(website, visits, highestVisits);
+
+  if (!website || !visits) return null;
 
   return (
     <div>
       <p className="text-center font-extrabold text-7xl text-white">
         {website.domain}
       </p>
-      {visits.map((visit) => {
-        return (
-          <p key={visit.path} className="text-slate-300">
-            <a
-              target={"_blank"}
-              rel="noreferrer"
-              href={visit.origin + visit.path}
-            >
-              {visit.path}:
-            </a>{" "}
-            {visit._count.id}
-          </p>
-        );
-      })}
+
+      <div className="md:flex justify-between">
+        <StatsCard
+          title="Top Sources"
+          keyTitle="Source"
+          valueTitle="Visitors"
+          highestValue={1}
+          list={sources}
+        />
+
+        <StatsCard
+          title="Top Pages"
+          keyTitle="Page"
+          valueTitle="Visitors"
+          highestValue={highestVisits}
+          list={visits.map((visit) => {
+            return {
+              title: visit.path,
+              link: visit.origin + visit.path,
+              value: visit._count.id,
+            };
+          })}
+        />
+      </div>
     </div>
   );
 };

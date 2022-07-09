@@ -1,9 +1,14 @@
+import { LogEvents } from "@constants/events";
+
 declare global {
   interface Window {
     _phantom: any;
     __nightmare: any;
     Cypress: any;
-    analyticz?: (event: LogEvent, options?: { props: { url: string } }) => void;
+    analyticz?: (
+      event: typeof LogEvents[number],
+      options?: { props: { url: string } }
+    ) => void;
   }
 }
 
@@ -22,7 +27,7 @@ declare global {
     console.warn(`Ignoring Event: ${msg}`);
   }
 
-  function trigger(event: LogEvent, options?: any) {
+  function trigger(event: typeof LogEvents[number], options?: any) {
     if (
       /^localhost$|^127(\.[0-9]+){0,2}\.[0-9]+$|^\[::1?\]$/.test(
         location.hostname

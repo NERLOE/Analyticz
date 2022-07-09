@@ -19,6 +19,9 @@ module.exports = {
           },
         },
       }),
+      screens: {
+        xs: "512px",
+      },
       colors: {
         gray: { ...colors.zinc, 750: "#333338" },
         zinc: colors.gray,

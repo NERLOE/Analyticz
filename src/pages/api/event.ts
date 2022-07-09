@@ -10,6 +10,8 @@ import NextCors from "nextjs-cors";
 import geolite2 from "geolite2";
 import maxmind, { CityResponse, CountryResponse } from "maxmind";
 import { x64 } from "murmurhash3js";
+import { getVisitorId } from "@utils/visitor";
+import isbot from "isbot";
 
 const schema = z.object({
   d: z.string(), // Domain
@@ -36,6 +38,19 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const geo = lookup.get(ip) as (CityResponse & CountryResponse) | null;
 
     const userAgent = req.headers["user-agent"];
+    if (!userAgent) {
+      return res
+        .status(200)
+        .json({ success: false, msg: "User agent not found" });
+    }
+
+    if (isbot(userAgent)) {
+      console.log(
+        `A bot has been detected, ignoring event. ua: ${userAgent}, ip: ${ip}`
+      );
+      return res.status(200).json({ success: false, msg: "Bot detected" });
+    }
+
     const { name: browser, os } = platform.parse(userAgent);
 
     const website = await prisma.website.findUnique({
@@ -89,11 +104,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     const url = new URL(data.u);
-    const visitorId = x64.hash128(
-      [userAgent, ip, req.headers.accept]
-        .filter((x) => x != undefined)
-        .join("~~~")
-    );
+    const visitorId = getVisitorId(userAgent, ip);
+
+    const screenWidth = data.w;
 
     if (data.e == "pageView") {
       await prisma.visit.create({
@@ -109,6 +122,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           country: geo?.country?.names?.en,
           ip,
           visitorId,
+          screenWidth,
         },
       });
     }

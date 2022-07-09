@@ -21,15 +21,17 @@ const MyApp: AppType = ({
   pageProps: { session, ...pageProps },
 }) => {
   const router = useRouter();
+  const title =
+    (process.env.NODE_ENV === "development" ? "(dev) " : "") + `Analyticz.io`;
 
   return (
     <>
       <Head>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <title>Analyticz.io</title>
+        <title>{title}</title>
         <link rel="canonical" href={process.env.SITE_URL + router.pathname} />
-        <meta name="title" content="Analyticz.io" />
-        <meta name="twitter:title" content="Analyticz.io" />
+        <meta name="title" content={title} />
+        <meta name="twitter:title" content={title} />
         <meta
           name="description"
           content="Analyticz.io is an open source analytics website, for monitoring and analyzing traffic on your website."
