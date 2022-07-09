@@ -61,8 +61,6 @@ export const sitesRouter = createRouter()
         });
       }
 
-      console.log(website);
-
       return await ctx.prisma.visit.groupBy({
         by: ["path", "origin"],
         _count: {
@@ -98,8 +96,6 @@ export const sitesRouter = createRouter()
           message: "User does not have access to this site.",
         });
       }
-
-      console.log(website);
 
       const sources = await ctx.prisma.visit.findMany({
         distinct: ["referrerId"],
