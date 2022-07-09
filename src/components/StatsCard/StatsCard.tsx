@@ -11,7 +11,7 @@ interface Props {
     title: string;
     link?: string;
     value: number;
-    icon?: string;
+    icon?: string | null;
   }[];
 }
 
