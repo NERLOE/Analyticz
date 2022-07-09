@@ -2,6 +2,8 @@ import { createRouter } from "./context";
 import { z } from "zod";
 import { getWebsiteData } from "@utils/website-data";
 import { TRPCError } from "@trpc/server";
+import { getDevice } from "@utils/request-information";
+import { StatsCardData } from "@components/StatsCard/StatsCard";
 
 export const sitesRouter = createRouter()
   .middleware(async ({ ctx, next }) => {
@@ -105,14 +107,141 @@ export const sitesRouter = createRouter()
         where: { websiteId: website.id },
       });
 
-      return sources.map((source) => {
-        console.log(source);
-        return {
-          title: source.referrer ? source.referrer.title : "None / Direct",
-          link: source.referrer ? source.referrer.domain : undefined,
-          icon: source.referrer ? source.referrer.icon : null,
-          value: 1,
-        };
+      return (
+        await Promise.all(
+          sources.map(async (source) => {
+            const visitors = await ctx.prisma.visit.findMany({
+              distinct: ["visitorId"],
+              include: {
+                referrer: true,
+              },
+              where: { websiteId: website.id, referrerId: source.referrerId },
+            });
+
+            return {
+              title: source.referrer ? source.referrer.title : "None / Direct",
+              link: source.referrer ? source.referrer.domain : undefined,
+              icon: source.referrer ? source.referrer.icon : null,
+              value: visitors.length,
+            };
+          })
+        )
+      ).sort((a, b) => (a.value > b.value ? -1 : 1));
+    },
+  })
+  .query("getCountries", {
+    input: z.object({
+      domain: z.string(),
+    }),
+    async resolve({ ctx, input }) {
+      const website = await ctx.prisma.website.findUnique({
+        where: { domain: input.domain },
       });
+
+      if (!website) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Website not found",
+        });
+      }
+
+      if (website.ownerId !== ctx.session?.user.id) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "User does not have access to this site.",
+        });
+      }
+
+      const countries = await ctx.prisma.visit.findMany({
+        distinct: ["country"],
+        where: { websiteId: website.id },
+      });
+
+      return (
+        await Promise.all(
+          countries
+            .filter((x) => x.country !== null)
+            .map(async (country) => {
+              const visitors = await ctx.prisma.visit.findMany({
+                distinct: ["visitorId"],
+                include: {
+                  referrer: true,
+                },
+                where: { websiteId: website.id, country: country.country },
+              });
+
+              return {
+                title: country.country as string,
+                link: undefined,
+                icon: country.country as string,
+                value: visitors.length,
+              };
+            })
+        )
+      ).sort((a, b) => (a.value > b.value ? -1 : 1));
+    },
+  })
+  .query("getDevices", {
+    input: z.object({
+      domain: z.string(),
+    }),
+    async resolve({ ctx, input }) {
+      const website = await ctx.prisma.website.findUnique({
+        where: { domain: input.domain },
+      });
+
+      if (!website) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Website not found",
+        });
+      }
+
+      if (website.ownerId !== ctx.session?.user.id) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "User does not have access to this site.",
+        });
+      }
+
+      const visits = await ctx.prisma.visit.findMany({
+        distinct: ["screenWidth"],
+        where: { websiteId: website.id },
+      });
+
+      const devices: StatsCardData[] = [];
+
+      await Promise.all(
+        visits
+          .filter((x) => x.screenWidth !== null)
+          .map(async (visit) => {
+            const visitors = await ctx.prisma.visit.findMany({
+              distinct: ["visitorId"],
+              include: {
+                referrer: true,
+              },
+              where: { websiteId: website.id, screenWidth: visit.screenWidth },
+            });
+
+            const device = getDevice(visit.screenWidth as number);
+            const existIndex = devices.findIndex((x) => x.title == device.name);
+            const exist = devices[existIndex];
+            if (exist) {
+              devices[existIndex] = {
+                ...exist,
+                value: exist.value + visitors.length,
+              };
+            } else {
+              devices.push({
+                title: device.name,
+                link: undefined,
+                icon: device.name,
+                value: visitors.length,
+              });
+            }
+          })
+      );
+
+      return devices.sort((a, b) => (a.value > b.value ? -1 : 1));
     },
   });

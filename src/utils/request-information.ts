@@ -2,6 +2,7 @@ import { NextApiRequest } from "next";
 
 export const getIpFromRequest = (req: NextApiRequest) => {
   const forwarded = req.headers["x-forwarded-for"] as string;
+  console.log("forwarded", forwarded);
 
   const ip =
     forwarded.split(",")[0]?.trim() ||
@@ -28,14 +29,21 @@ export const isMobileDevice = (userAgent: string) => {
   return isMobile;
 };
 
-export const getDevice = (width: number) => {
+export type DeviceName = "Mobile" | "Tablet" | "Laptop" | "Desktop";
+
+export const getDevice = (
+  width: number
+): {
+  name: DeviceName;
+  description: string;
+} => {
   if (width <= 576) {
-    return "Mobile";
+    return { name: "Mobile", description: "up to 576px" };
   } else if (width <= 992) {
-    return "Tablet";
+    return { name: "Tablet", description: "576px to 992px" };
   } else if (width <= 1440) {
-    return "Laptop";
+    return { name: "Laptop", description: "992px to 1440px" };
   } else {
-    return "Desktop";
+    return { name: "Desktop", description: "above 1440px" };
   }
 };

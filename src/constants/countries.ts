@@ -1,3 +1,9 @@
+export type CountriesType = keyof typeof countries;
+
+export function getCountryFlag(country: CountriesType) {
+  return countries[country];
+}
+
 export const countries = {
   Denmark: "🇩🇰",
   "United Kingdom": "🇬🇧",
@@ -90,4 +96,4 @@ export const countries = {
   Portugal: "🇵🇹",
   Bulgaria: "🇧🇬",
   Malta: "🇲🇹",
-};
+} as const;

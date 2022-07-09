@@ -1,18 +1,21 @@
 import Card from "@components/Card/Card";
 import { faArrowUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ReactNode } from "react";
+
+export type StatsCardData = {
+  title: string;
+  link?: string;
+  value: number;
+  icon?: ReactNode | null;
+};
 
 interface Props {
   title: string;
   keyTitle: string;
   valueTitle: string;
   highestValue: number;
-  list: {
-    title: string;
-    link?: string;
-    value: number;
-    icon?: string | null;
-  }[];
+  list: StatsCardData[];
 }
 
 const StatsCard = ({
@@ -51,22 +54,20 @@ const StatsCard = ({
                 }}
               />
               <span className="flex px-2 py-1.5 group text-gray-300 relative z-9 break-all">
-                <span className="block md:truncate group-hover:underline">
-                  {data.icon && (
-                    <img
-                      className="inline h-4 w-4 mr-2 -mt-px align-middle"
-                      alt={data.title}
-                      src={data.icon}
+                <span className="block truncate">
+                  <span className="inline h-4 w-4 mr-2 -mt-px align-middle">
+                    {data.icon}
+                  </span>
+                  <span className="group-hover:underline">{data.title}</span>
+                </span>
+                {data.link && (
+                  <span className="hidden group-hover:block absolute -right-5">
+                    <FontAwesomeIcon
+                      icon={faArrowUpRightFromSquare}
+                      className="inline w-4 h-4 ml-1 -mt-1 text-gray-400"
                     />
-                  )}
-                  {data.title}
-                </span>
-                <span className="hidden group-hover:block absolute -right-5">
-                  <FontAwesomeIcon
-                    icon={faArrowUpRightFromSquare}
-                    className="inline w-4 h-4 ml-1 -mt-1 text-gray-400"
-                  />
-                </span>
+                  </span>
+                )}
               </span>
             </a>
 
