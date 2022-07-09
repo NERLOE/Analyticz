@@ -76,7 +76,7 @@ const AnalyticsPage: NextPage<Props> = () => {
   if (!website || !visits || !sources || !countries || !devices) return null;
 
   return (
-    <div className="flex w-full flex-col">
+    <div className="container">
       <p className="my-10 text-center font-extrabold text-2xl sm:text-4xl lg:text-7xl text-white break-all">
         {website.domain}
       </p>

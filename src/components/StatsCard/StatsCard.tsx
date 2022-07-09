@@ -36,12 +36,14 @@ const StatsCard = ({
         </span>
       </div>
       {list.map((data) => {
+        const Component = data.link ? "a" : "div";
+
         return (
           <div
             key={data.title}
             className="flex items-center justify-between my-1 text-sm"
           >
-            <a
+            <Component
               className="w-full relative"
               style={{ maxWidth: "calc(100% - 5rem)" }}
               target={"_blank"}
@@ -70,7 +72,7 @@ const StatsCard = ({
                   </span>
                 )}
               </span>
-            </a>
+            </Component>
 
             <span className="font-medium text-gray-200 w-20 text-right">
               {data.valueText ?? data.value}

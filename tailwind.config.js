@@ -3,6 +3,9 @@ const colors = require("tailwindcss/colors");
 module.exports = {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
+    container: {
+      center: true,
+    },
     extend: {
       typography: (theme) => ({
         DEFAULT: {
