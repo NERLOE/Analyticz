@@ -121,7 +121,7 @@ const AnalyticsPage: NextPage<Props> = () => {
 
   return (
     <div className="flex w-full flex-col">
-      <p className="my-10 text-center font-extrabold text-7xl text-white">
+      <p className="my-10 text-center font-extrabold text-2xl sm:text-4xl lg:text-7xl text-white break-all">
         {website.domain}
       </p>
 
