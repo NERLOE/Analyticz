@@ -8,6 +8,7 @@ export default class _Document extends Document {
           <meta charSet="utf-8" />
           <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
           <link rel="alternate icon" sizes="48x48" href="/favicon.ico" />
+          <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
           <link
             rel="apple-touch-icon"
             sizes="180x180"
