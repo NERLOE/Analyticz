@@ -33,7 +33,10 @@ export const sitesRouter = createRouter()
         });
       }
 
-      if (website.ownerId !== ctx.session?.user.id) {
+      if (
+        website.ownerId !== ctx.session?.user.id &&
+        website.isPublic === false
+      ) {
         throw new TRPCError({ code: "UNAUTHORIZED" });
       }
 
@@ -56,7 +59,10 @@ export const sitesRouter = createRouter()
         });
       }
 
-      if (website.ownerId !== ctx.session?.user.id) {
+      if (
+        website.ownerId !== ctx.session?.user.id &&
+        website.isPublic === false
+      ) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
           message: "User does not have access to this site.",
@@ -92,7 +98,10 @@ export const sitesRouter = createRouter()
         });
       }
 
-      if (website.ownerId !== ctx.session?.user.id) {
+      if (
+        website.ownerId !== ctx.session?.user.id &&
+        website.isPublic === false
+      ) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
           message: "User does not have access to this site.",
@@ -165,7 +174,10 @@ export const sitesRouter = createRouter()
         });
       }
 
-      if (website.ownerId !== ctx.session?.user.id) {
+      if (
+        website.ownerId !== ctx.session?.user.id &&
+        website.isPublic === false
+      ) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
           message: "User does not have access to this site.",
@@ -217,7 +229,10 @@ export const sitesRouter = createRouter()
         });
       }
 
-      if (website.ownerId !== ctx.session?.user.id) {
+      if (
+        website.ownerId !== ctx.session?.user.id &&
+        website.isPublic === false
+      ) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
           message: "User does not have access to this site.",
