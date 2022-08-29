@@ -11,6 +11,9 @@ import { BuiltInProviderType } from "next-auth/providers";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Card from "@components/Card/Card";
+import { authOptions } from "./api/auth/[...nextauth]";
+import { unstable_getServerSession } from "next-auth";
+import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 
 const errors = {
   Signin: "Try signing with a different account.",
@@ -113,5 +116,28 @@ const SignIn = () => {
     </div>
   );
 };
+
+export async function getServerSideProps(
+  context: GetServerSidePropsContext
+): Promise<GetServerSidePropsResult<any>> {
+  const session = await unstable_getServerSession(
+    context.req,
+    context.res,
+    authOptions
+  );
+
+  if (session) {
+    return {
+      redirect: {
+        destination: "/sites",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+}
 
 export default SignIn;

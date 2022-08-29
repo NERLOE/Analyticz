@@ -57,7 +57,7 @@ export async function getServerSideProps(
     return {
       redirect: {
         destination: "/signin",
-        permanent: true,
+        permanent: false,
       },
     };
   }
@@ -69,7 +69,7 @@ export async function getServerSideProps(
     return {
       redirect: {
         destination: "/sites/new",
-        permanent: true,
+        permanent: false,
       },
     };
   }
