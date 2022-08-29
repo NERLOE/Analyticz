@@ -1,21 +1,11 @@
-"use strict";
+const analyticzDomain = "https://analyticz.marcusnerloe.dk";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true,
-});
-exports.withAnalyticzProxy = void 0;
-
-const getRemoteScriptName = (domain, selfHosted) => "analyticz";
+const getRemoteScriptName = (domain, selfHosted = false) => {
+  return selfHosted || domain === analyticzDomain ? "analyticz" : "index";
+};
 
 const getScriptPath = (options) => {
-  var _options$scriptName;
-
-  const basePath = `/js/${[
-    (_options$scriptName = options.scriptName) !== null &&
-    _options$scriptName !== void 0
-      ? _options$scriptName
-      : "script",
-  ].join(".")}.js`;
+  const basePath = `/js/${[options.scriptName ?? "script"].join(".")}.js`;
 
   if (options.subDirectory) {
     return `/${options.subDirectory}${basePath}`;
@@ -24,31 +14,12 @@ const getScriptPath = (options) => {
   return basePath;
 };
 
-const analyticzDomain =
-  process.env.SITE_URL || "https://analyticz.marcusnerloe.dk";
+const getDomain = (options) => options.customDomain ?? analyticzDomain ?? "";
 
-const getDomain = (options) => {
-  var _ref, _options$customDomain;
-
-  return (_ref =
-    (_options$customDomain = options.customDomain) !== null &&
-    _options$customDomain !== void 0
-      ? _options$customDomain
-      : analyticzDomain) !== null && _ref !== void 0
-    ? _ref
-    : "";
-};
-
-const getApiEndpoint = (options) => {
-  var _options$subDirectory;
-
-  return `/${
-    (_options$subDirectory = options.subDirectory) !== null &&
-    _options$subDirectory !== void 0
-      ? _options$subDirectory
-      : "proxy"
-  }/api/event${options.trailingSlash ? "/" : ""}`;
-};
+const getApiEndpoint = (options) =>
+  `/${options.subDirectory ?? "proxy"}/api/event${
+    options.trailingSlash ? "/" : ""
+  }`;
 
 const withAnalyticzProxy = (options = {}) => {
   return (nextConfig) => {
@@ -56,6 +27,7 @@ const withAnalyticzProxy = (options = {}) => {
       ...options,
       trailingSlash: !!nextConfig.trailingSlash,
     };
+
     return {
       ...nextConfig,
       publicRuntimeConfig: {
@@ -63,10 +35,7 @@ const withAnalyticzProxy = (options = {}) => {
         nextAnalyticzPublicProxyOptions,
       },
       rewrites: async () => {
-        var _nextConfig$rewrites;
-
         const domain = getDomain(options);
-
         const getRemoteScript = () =>
           domain +
           getScriptPath({
@@ -83,11 +52,12 @@ const withAnalyticzProxy = (options = {}) => {
             destination: `${domain}/api/event`,
           },
         ];
-        const rewrites = await ((_nextConfig$rewrites = nextConfig.rewrites) ===
-          null || _nextConfig$rewrites === void 0
-          ? void 0
-          : _nextConfig$rewrites.call(nextConfig));
 
+        if (process.env.ANALYTICZ_DEBUG) {
+          console.log("analyticzRewrites = ", analyticzRewrites);
+        }
+
+        const rewrites = await nextConfig.rewrites?.();
         if (!rewrites) {
           return analyticzRewrites;
         } else if (Array.isArray(rewrites)) {

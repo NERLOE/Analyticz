@@ -179,6 +179,7 @@ export async function getServerSideProps(
       );
 
       if (
+        !website.isPublic &&
         website.ownerId != session?.user.id &&
         process.env.NODE_ENV === "production"
       ) {

@@ -84,6 +84,7 @@ model Website {
     icon      String?
     updatedAt DateTime @default(now())
     visits    Visit[]
+    isPublic  Boolean  @default(value: false)
 }
 
 model Referrer {

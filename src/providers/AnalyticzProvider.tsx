@@ -2,8 +2,11 @@ import { NextConfig } from "next";
 import getConfig from "next/config";
 import Script from "next/script";
 
-const getRemoteScriptName = (domain: string, selfHosted?: boolean) =>
-  "analyticz";
+const analyticzDomain = "https://analyticz.marcusnerloe.dk";
+
+const getRemoteScriptName = (domain: string, selfHosted?: boolean) => {
+  return selfHosted || domain === analyticzDomain ? "analyticz" : "index";
+};
 
 const getScriptPath = (options: NextAnalyticzProxyOptions) => {
   const basePath = `/js/${[options.scriptName ?? "script"].join(".")}.js`;
@@ -14,9 +17,6 @@ const getScriptPath = (options: NextAnalyticzProxyOptions) => {
 
   return basePath;
 };
-
-const analyticzDomain =
-  process.env.SITE_URL || "https://analyticz.marcusnerloe.dk";
 
 const getDomain = (options: { customDomain?: string }) =>
   options.customDomain ?? analyticzDomain ?? "";
@@ -57,6 +57,10 @@ export const withAnalyticzProxy = (options: NextAnalyticzProxyOptions = {}) => {
             destination: `${domain}/api/event`,
           },
         ];
+
+        if (process.env.ANALYTICZ_DEBUG) {
+          console.log("analyticzRewrites = ", analyticzRewrites);
+        }
 
         const rewrites = await nextConfig.rewrites?.();
         if (!rewrites) {
