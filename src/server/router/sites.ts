@@ -6,17 +6,17 @@ import { getDevice } from "@utils/request-information";
 import { StatsCardData } from "@components/StatsCard/StatsCard";
 
 export const sitesRouter = createRouter()
-  .middleware(async ({ ctx, next }) => {
-    /**
-     * Any queries or mutations after this middleware will
-     * raise an error unless there is a current session
-     */
-    if (!ctx.session) {
-      throw new TRPCError({ code: "UNAUTHORIZED" });
-    }
+  // .middleware(async ({ ctx, next }) => {
+  //   /**
+  //    * Any queries or mutations after this middleware will
+  //    * raise an error unless there is a current session
+  //    */
+  //   if (!ctx.session) {
+  //     throw new TRPCError({ code: "UNAUTHORIZED" });
+  //   }
 
-    return next();
-  })
+  //   return next();
+  // })
   .query("getWebsite", {
     input: z.object({
       domain: z.string(),
