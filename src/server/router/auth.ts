@@ -84,7 +84,13 @@ export const getUserWebsites = async (session?: Session | null) => {
       if (shouldBeUpdated(site.updatedAt)) {
         const websiteData = await getWebsiteData(`https://${site.domain}`);
 
-        if (!websiteData) return site;
+        if (!websiteData) {
+          await prisma.website.update({
+            where: { id: site.id },
+            data: { updatedAt: new Date() },
+          });
+          return site;
+        }
 
         await prisma.website.update({
           where: { id: site.id },
